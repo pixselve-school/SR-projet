@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true,
   },
-  "extends": "@tsconfig/recommended/tsconfig.json"
+  "extends": "@tsconfig/node-lts/tsconfig.json"
 }

@@ -1,7 +1,12 @@
 {
-  "name": "shared",
+  "name": "@viper-vortex/shared",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.3"
+    "@tsconfig/node-lts": "^20.1.1"
   }
 }
