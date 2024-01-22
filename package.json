@@ -1,0 +1,4 @@
+{
+  "name": "viper-vortex",
+  "workspaces": ["packages/client", "packages/server", "packages/shared"]
+}
