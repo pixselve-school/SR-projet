@@ -1,0 +1,16 @@
+{
+  "name": "server",
+  "type": "module",
+  "scripts": {
+    "start": "npx tsx src/index.ts"
+  },
+  "dependencies": {
+    "tsx": "^4.7.0",
+    "socket.io": "^4.7.4",
+    "bufferutil": "^4.0.8",
+    "utf-8-validate": "^6.0.3"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.3"
+  }
+}

@@ -17,3 +17,15 @@ export type Coordinate = {
   x: number;
   y: number;
 }
+
+export type PlayerMove = {
+  angle: number;
+  isSprinting: boolean;
+}
+
+export enum SOCKET_EVENTS {
+  CONNECT = 'connect',
+  DISCONNECT = 'disconnect',
+  MOVE = 'move',
+  FRAME = 'frame',
+}

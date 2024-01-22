@@ -1,4 +1,7 @@
 {
   "name": "viper-vortex",
-  "workspaces": ["packages/client", "packages/server", "packages/shared"]
+  "workspaces": ["packages/client", "packages/server", "packages/shared"],
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
 }
