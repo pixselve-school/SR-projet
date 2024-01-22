@@ -2,8 +2,8 @@
 
 import { randomUsername } from '@/utils/random';
 import {useEffect, useRef, useState} from 'react';
-import {GameMap, SOCKET_EVENTS} from "@viper-vortex/shared";
-import {socket} from "@/socket";
+import {type GameMap, SOCKET_EVENTS} from "@viper-vortex/shared";
+import {socket} from "@/utils/socket";
 
 export default function HomePage() {
   const [name, setName] = useState(randomUsername());
@@ -86,7 +86,7 @@ export default function HomePage() {
     gameMap.players.forEach(player => {
       context.beginPath();
       // for each piece of the player's body
-      player.body.forEach((bodyPart, index) => {
+      player.body.forEach((bodyPart) => {
         context.arc(bodyPart.x, bodyPart.y, 10, 0, 2 * Math.PI); // Draw a circle for each player
         // use the player's color
         context.fillStyle = player.color;
@@ -113,7 +113,7 @@ export default function HomePage() {
         clearInterval(intervalId);
       };
     }
-  }, [cursorPosition, gameMap, socket]);
+  }, [cursorPosition, gameMap]);
 
 
   return (
@@ -122,12 +122,9 @@ export default function HomePage() {
       {/*  <label htmlFor="username">Username</label>*/}
       {/*  <input type="text" value={name} onChange={(e) => setName(e.target.value)} id="username" className='px-4 py-2 rounded-md' />*/}
       {/*</form>*/}
-
-
       <button onClick={connect}>Connect</button>
       {isConnected && <p>Connected</p>}
       {gameMap && <canvas ref={canvasRef} id="game" width={gameMap.width} height={gameMap.height}/>}
-
     </main>
   );
 }
