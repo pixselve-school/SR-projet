@@ -1,10 +1,21 @@
-import { type Position } from '@viper-vortex/shared';
+import { type Camera } from "@/app/canvas";
+import { type Position } from "@viper-vortex/shared";
 
-export function screenToWorld(screenPos: Position, screenSize: Position, sceneSize): Position {
-
-  return { x: 0, y: 0 };
+export function screenToWorld(
+  screenPos: Position,
+  camera: Camera,
+): Position {
+  return {
+    x: (screenPos.x - camera.offset.x) / camera.zoom,
+    y: (screenPos.y - camera.offset.y) / camera.zoom,
+  };
 }
-export function worldToScreen(worldPos: Position): Position {
-
-  return { x: 0, y: 0 };
+export function worldToScreen(
+  worldPos: Position,
+  camera: Camera,
+): Position {
+  return {
+    x: worldPos.x * camera.zoom + camera.offset.x,
+    y: worldPos.y * camera.zoom + camera.offset.y,
+  };
 }

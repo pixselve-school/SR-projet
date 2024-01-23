@@ -3,6 +3,7 @@ import {
   GameMap,
   newGameMap,
   Player,
+  randomFood,
   SOCKET_EVENTS,
   TPS,
 } from "@viper-vortex/shared";
@@ -15,6 +16,11 @@ const io = new Server({
 });
 
 const gameMap: GameMap = newGameMap();
+
+// interval to refill the food
+setInterval(() => {
+  gameMap.food = gameMap.food.concat(randomFood(2));
+}, 1000);
 
 io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   console.log(`New connection: ${socket.id}`);

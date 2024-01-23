@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { type Camera } from "@/app/canvas";
+import { screenToWorld } from "@/utils/position";
+import { type Position } from '@viper-vortex/shared';
+import { useEffect, useMemo, useState } from "react";
 
-export function useMouse<T extends HTMLElement>(ref: React.RefObject<T> | null | undefined) {
-  const [cursorPosition, setCursorPosition] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
+export function useMouse<T extends HTMLElement>(
+  ref: React.RefObject<T> | null | undefined,
+  camera: Camera,
+) {
+  const [cursorPosition, setCursorPosition] = useState<Position>({ x: 0, y: 0 });
   useEffect(() => {
     if (!ref) return;
     const elem = ref.current;
@@ -16,6 +19,11 @@ export function useMouse<T extends HTMLElement>(ref: React.RefObject<T> | null |
     return () => {
       elem.removeEventListener("mousemove", mouseMoveHandler);
     };
-  }, [ref]);
-  return cursorPosition;
+  }, [camera.offset.x, camera.offset.y, ref]);
+
+  const cursorWorldPosition = useMemo(() => {
+    return screenToWorld(cursorPosition, camera);
+  }, [camera, cursorPosition]);
+
+  return [cursorPosition, cursorWorldPosition] as const;
 }
