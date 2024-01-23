@@ -9,6 +9,11 @@ export default function HomePage() {
   return (
     <main className="flex flex-col items-center h-full justify-center">
       {!api.isConnected && <button onClick={api.connect}>Connect</button>}
+      <pre>
+        <code className='max-w-screen-sm overflow-auto'>
+          {JSON.stringify(api.me, null, 2)}
+        </code>
+      </pre>
       {api.isConnected && api.scene && <Canvas />}
     </main>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { useApi } from '@/hooks/useApi';
 import { useMouse } from '@/hooks/useMouse';
 import { useScreen } from '@/hooks/useScreen';
@@ -14,21 +16,21 @@ export function Canvas() {
   useEffect(() => {
     // Get the player's head position
     if (!api.scene || !api.me) return;
-    const playerHead = api.me.body[0]; // Assuming the current player is the first one in the players array
+    const playerHead = api.me.body[0];
     if (!playerHead) return;
-
     const angle = Math.atan2(curPos.y - playerHead.y, curPos.x - playerHead.x);
-
     const intervalId = setInterval(() => {
       api.move({ angle, isSprinting: false });
     }, 1000 / TPS);
 
-    // Clear the interval when the component is unmounted or the dependencies change
     return () => {
       clearInterval(intervalId);
     };
   }, [api, curPos]);
 
+  useEffect(() => {
+    console.log("scene", api.scene);
+  }, [api.scene]);
 
   // DRAW THE SCENE
   useEffect(() => {
@@ -48,7 +50,7 @@ export function Canvas() {
     c.fill();
 
     if (!api.scene) {
-      return 
+      return
     };
 
 
@@ -72,8 +74,9 @@ export function Canvas() {
         c.fill();
       });
     });
-  }, [api, curPos]);
+  }, [api, api.scene, curPos]);
 
+  if (!api.scene) return "Scene not found";
 
   return <canvas ref={ref} className='w-full cursor-none h-full' height={height} width={width} />;
 }
