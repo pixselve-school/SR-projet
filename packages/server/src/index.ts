@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import {
   GameMap,
   newGameMap,
-  Player,
+  PlayerDTO,
   randomFood,
   SOCKET_EVENTS,
   TPS,
@@ -25,7 +25,7 @@ setInterval(() => {
 io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   console.log(`New connection: ${socket.id}`);
 
-  const player: Player = {
+  const player: PlayerDTO = {
     id: socket.id,
     name: "Player 1",
     color: "#000000",

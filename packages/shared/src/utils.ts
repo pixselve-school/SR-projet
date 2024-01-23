@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Food, GameMap } from "./types";
+import { FoodDTO, GameMap } from "./types";
 
 /**
  * Create a new game map.
@@ -17,7 +17,7 @@ export function newGameMap(): GameMap {
 }
 
 export function randomFood(number: number = 1) {
-  const food: Food[] = [];
+  const food: FoodDTO[] = [];
   for (let i = 0; i < number; i++) {
     food.push({
       id: uuidv4(),

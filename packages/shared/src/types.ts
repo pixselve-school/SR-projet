@@ -4,14 +4,14 @@
 export type GameMap = {
   width: number;
   height: number;
-  players: Player[];
-  food: Food[]
+  players: PlayerDTO[];
+  food: FoodDTO[]
 }
 
 /**
  * Represents a player.
  */
-export type Player = {
+export type PlayerDTO = {
   body: Position[];
   id: string;
   name: string;
@@ -28,7 +28,7 @@ export type Position = {
   y: number;
 }
 
-export type Food = {
+export type FoodDTO = {
   id: string;
   position: Position;
 }
