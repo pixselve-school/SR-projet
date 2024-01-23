@@ -5,14 +5,14 @@ export type GameMap = {
   width: number;
   height: number;
   players: Player[];
-  food: Coordinate[];
+  food: Food[]
 }
 
 /**
  * Represents a player.
  */
 export type Player = {
-  body: Coordinate[];
+  body: Position[];
   id: string;
   name: string;
   color: string;
@@ -23,12 +23,15 @@ export type Player = {
 /**
  * Represents a coordinate.
  */
-export type Coordinate = {
+export type Position = {
   x: number;
   y: number;
 }
 
-export type Position = Coordinate;
+export type Food = {
+  id: string;
+  position: Position;
+}
 
 /**
  * Represents a player move.

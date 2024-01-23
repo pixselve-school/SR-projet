@@ -8,6 +8,10 @@
     "watch": "tsc -w"
   },
   "devDependencies": {
-    "@tsconfig/node-lts": "^20.1.1"
+    "@tsconfig/node-lts": "^20.1.1",
+    "@types/uuid": "^9.0.7"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
   }
 }

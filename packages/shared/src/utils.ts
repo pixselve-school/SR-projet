@@ -1,5 +1,5 @@
-import { Coordinate, GameMap } from './types';
-
+import { v4 as uuidv4 } from "uuid";
+import { Food, GameMap } from "./types";
 
 /**
  * Create a new game map.
@@ -17,11 +17,14 @@ export function newGameMap(): GameMap {
 }
 
 export function randomFood(number: number = 1) {
-  const food: Coordinate[] = [];
+  const food: Food[] = [];
   for (let i = 0; i < number; i++) {
     food.push({
-      x: Math.floor(Math.random() * 1000),
-      y: Math.floor(Math.random() * 1000),
+      id: uuidv4(),
+      position: {
+        x: Math.floor(Math.random() * 1000),
+        y: Math.floor(Math.random() * 1000),
+      },
     });
   }
   return food;

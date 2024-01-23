@@ -103,7 +103,7 @@ export function Canvas({ centered }: { centered?: boolean }) {
 
     // Draw all food
     api.scene.food.forEach(food => {
-      const screenFood = worldToScreen(food, camera);
+      const screenFood = worldToScreen(food.position, camera);
       c.beginPath();
       c.arc(screenFood.x, screenFood.y, 10, 0, 2 * Math.PI); // Draw a circle for each food
       // use green color
