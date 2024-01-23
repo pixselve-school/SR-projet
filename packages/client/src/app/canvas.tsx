@@ -29,7 +29,7 @@ export function Canvas() {
   }, [api, curPos]);
 
   useEffect(() => {
-    console.log("scene", api.scene);
+    console.log("scene in canvas", api.scene);
   }, [api.scene]);
 
   // DRAW THE SCENE
@@ -49,9 +49,8 @@ export function Canvas() {
     c.fillStyle = 'red';
     c.fill();
 
-    if (!api.scene) {
+    if (!api.scene)
       return
-    };
 
 
     // Draw all food
