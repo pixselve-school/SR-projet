@@ -1,11 +1,11 @@
-import {GameMap} from "@viper-vortex/shared";
+import { BASE_SPEED, GameMap, SPRINT_SPEED } from "@viper-vortex/shared";
 
 export default function handleFrame(gameMap: GameMap) {
   for (let player of gameMap.players) {
     // move the player
     // start with the head
     const head = player.body[0];
-    const speed = player.isSprinting ? 2 : 1;
+    const speed = player.isSprinting ? SPRINT_SPEED : BASE_SPEED;
     head.x += Math.cos(player.angle) * speed;
     head.y += Math.sin(player.angle) * speed;
 
@@ -27,7 +27,10 @@ export default function handleFrame(gameMap: GameMap) {
     const RADIUS = 10;
     for (let i = 0; i < gameMap.food.length; i++) {
       const food = gameMap.food[i];
-      if (Math.abs(food.x - head.x) < RADIUS && Math.abs(food.y - head.y) < RADIUS) {
+      if (
+        Math.abs(food.x - head.x) < RADIUS &&
+        Math.abs(food.y - head.y) < RADIUS
+      ) {
         // collision
         // remove the food
         gameMap.food.splice(i, 1);
@@ -38,7 +41,5 @@ export default function handleFrame(gameMap: GameMap) {
         });
       }
     }
-
-
   }
 }

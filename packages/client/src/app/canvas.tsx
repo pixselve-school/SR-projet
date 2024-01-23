@@ -4,33 +4,40 @@ import { useApi } from '@/hooks/useApi';
 import { useMouse } from '@/hooks/useMouse';
 import { useScreen } from '@/hooks/useScreen';
 import { TPS } from '@viper-vortex/shared';
-import { useEffect, useRef } from 'react';
-
-export function Canvas() {
+import { throttle } from 'lodash';
+import { useEffect, useRef, useState } from 'react';
+export type Camera = {
+  offset: {
+    x: number;
+    y: number;
+  };
+  zoom: number;
+}
+export function Canvas({ centered }: { centered?: boolean }) {
   const api = useApi();
   const ref = useRef<HTMLCanvasElement | null>(null);
+  const [camera, setCamera] = useState<Camera>({ offset: { x: 0, y: 0 }, zoom: 1 });
   const curPos = useMouse(ref)
   const { width, height } = useScreen();
 
   // MOVE THE PLAYER
   useEffect(() => {
-    // Get the player's head position
     if (!api.scene || !api.me) return;
-    const playerHead = api.me.body[0];
-    if (!playerHead) return;
-    const angle = Math.atan2(curPos.y - playerHead.y, curPos.x - playerHead.x);
-    const intervalId = setInterval(() => {
+
+    const movePlayer = throttle(() => {
+      if (!api.scene || !api.me) return;
+      const playerHead = api.me.body[0];
+      if (!playerHead) return;
+      const angle = Math.atan2(curPos.y - playerHead.y, curPos.x - playerHead.x);
       api.move({ angle, isSprinting: false });
     }, 1000 / TPS);
 
+    movePlayer();
     return () => {
-      clearInterval(intervalId);
+      movePlayer.cancel();
     };
-  }, [api, curPos]);
+  }, [api, curPos.x, curPos.y]);
 
-  useEffect(() => {
-    console.log("scene in canvas", api.scene);
-  }, [api.scene]);
 
   // DRAW THE SCENE
   useEffect(() => {
@@ -38,8 +45,6 @@ export function Canvas() {
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
-
-    // Clear the canvas
     c.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw a circle at the cursor position
@@ -48,6 +53,18 @@ export function Canvas() {
     // use red color
     c.fillStyle = 'red';
     c.fill();
+
+    // Draw a line from the player's head to the cursor
+    if (api.me) {
+      const playerHead = api.me.body[0];
+      if (playerHead) {
+        c.beginPath();
+        c.moveTo(playerHead.x, playerHead.y);
+        c.lineTo(curPos.x, curPos.y);
+        c.strokeStyle = 'red';
+        c.stroke();
+      }
+    }
 
     if (!api.scene)
       return
@@ -64,13 +81,13 @@ export function Canvas() {
 
     // Draw all players
     api.scene.players.forEach(player => {
-      c.beginPath();
-      // for each piece of the player's body
       player.body.forEach((bodyPart) => {
-        c.arc(bodyPart.x, bodyPart.y, 10, 0, 2 * Math.PI); // Draw a circle for each player
-        // use the player's color
+        c.beginPath();
+        c.arc(bodyPart.x, bodyPart.y, 10, 0, 2 * Math.PI);
         c.fillStyle = player.color;
         c.fill();
+        c.strokeStyle = player.color;
+        c.stroke();
       });
     });
   }, [api, api.scene, curPos]);

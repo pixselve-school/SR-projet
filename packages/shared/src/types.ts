@@ -28,6 +28,8 @@ export type Coordinate = {
   y: number;
 }
 
+export type Position = Coordinate;
+
 /**
  * Represents a player move.
  */

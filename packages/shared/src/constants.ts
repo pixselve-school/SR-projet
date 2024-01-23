@@ -1,5 +1,7 @@
 export const TPS = 60; // ticks per second
 
+export const BASE_SPEED = 2;
+export const SPRINT_SPEED = 4;
 
 /**
  * Enum for socket events.
