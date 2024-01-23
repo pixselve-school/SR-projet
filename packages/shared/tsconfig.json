@@ -3,6 +3,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "declaration": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
   },
-  "extends": "@tsconfig/node-lts/tsconfig.json"
+  "extends": "@tsconfig/node-lts/tsconfig.json",
 }

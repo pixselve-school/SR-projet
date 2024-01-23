@@ -1,26 +1,29 @@
 import { Server } from "socket.io";
-import {GameMap, newGameMap, Player, SOCKET_EVENTS} from "@viper-vortex/shared";
+import {
+  GameMap,
+  newGameMap,
+  Player,
+  SOCKET_EVENTS,
+  TPS,
+} from "@viper-vortex/shared";
 import handleFrame from "./handleFrame";
 
 const io = new Server({
   cors: {
-    origin: '*',
-  }
+    origin: "*",
+  },
 });
 
 const gameMap: GameMap = newGameMap();
-
 
 io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   console.log(`New connection: ${socket.id}`);
 
   const player: Player = {
     id: socket.id,
-    name: 'Player 1',
-    color: '#000000',
-    body: [
-      {x: 0, y: 0},
-    ],
+    name: "Player 1",
+    color: "#000000",
+    body: [{ x: 0, y: 0 }],
     isSprinting: false,
     angle: 0,
   };
@@ -42,9 +45,8 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
 });
 
 setInterval(() => {
-  handleFrame(gameMap)
+  handleFrame(gameMap);
   io.emit(SOCKET_EVENTS.FRAME, gameMap);
-}, 1000 / 60);
+}, 1000 / TPS);
 
 io.listen(4000);
-
