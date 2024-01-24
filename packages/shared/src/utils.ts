@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Food, GameMap } from "./types";
+import { Food, GameMap, Player } from "./types";
 
 /**
  * Create a new game map.
@@ -33,4 +33,8 @@ export function randomFood(number: number = 1) {
 export function randomDarkColor() {
   const randomColor = Math.floor(Math.random() * 16777215).toString(16);
   return "#" + randomColor;
+}
+
+export function getPlayerHead(player: Player) {
+  return player.body[0];
 }

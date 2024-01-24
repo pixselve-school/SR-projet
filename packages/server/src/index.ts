@@ -35,6 +35,7 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
     body: [{ x: 0, y: 0 }],
     isSprinting: false,
     angle: 0,
+    desiredAngle: 0,
   };
 
   gameMap.players.push(player);
@@ -51,7 +52,7 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   socket.on(SOCKET_EVENTS.MOVE, (move) => {
     // we rely on the reference to the player object
     player.isSprinting = move.isSprinting;
-    player.angle = move.angle;
+    player.desiredAngle = move.angle;
   });
 });
 

@@ -2,34 +2,61 @@ import {
   BASE_SPEED,
   FOOD_PICKUP_RADIUS,
   GameMap,
+  getPlayerHead,
+  Player,
   SPRINT_SPEED,
+  MAX_ANGLE,
 } from "@viper-vortex/shared";
+
+function movePlayer(player: Player, gameMap: GameMap) {
+  // move the player
+  // start with the head
+
+  const head = getPlayerHead(player);
+  const speed = player.isSprinting ? SPRINT_SPEED : BASE_SPEED;
+
+  const currentAngle = player.angle;
+  const targetAngle = player.desiredAngle;
+
+  // calculate the angle to turn
+  let angleDiff = targetAngle - currentAngle;
+  if (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+  if (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+
+  // limit the angle to turn
+  if (angleDiff > MAX_ANGLE) angleDiff = MAX_ANGLE;
+  if (angleDiff < -MAX_ANGLE) angleDiff = -MAX_ANGLE;
+
+  // apply the angle
+  player.angle += angleDiff;
+
+  head.x += Math.cos(player.angle) * speed;
+  head.y += Math.sin(player.angle) * speed;
+
+  // if the player reaches the edge of the map, slides along the edge
+  if (head.x < 0) head.x = 0;
+  if (head.y < 0) head.y = 0;
+  if (head.x > gameMap.width) head.x = gameMap.width;
+  if (head.y > gameMap.height) head.y = gameMap.height;
+
+  // then all the other body parts follow by moving to the position of the previous body part
+  for (let i = player.body.length - 1; i > 0; i--) {
+    const currentPart = player.body[i];
+    const previousPart = player.body[i - 1];
+    currentPart.x = previousPart.x;
+    currentPart.y = previousPart.y;
+  }
+  return head;
+}
 
 export default function handleFrame(
   gameMap: GameMap,
   onPlayerDeath: (playerId: string) => void,
 ) {
   for (let player of gameMap.players) {
-    // move the player
-    // start with the head
-    const head = player.body[0];
-    const speed = player.isSprinting ? SPRINT_SPEED : BASE_SPEED;
-    head.x += Math.cos(player.angle) * speed;
-    head.y += Math.sin(player.angle) * speed;
+    movePlayer(player, gameMap);
 
-    // if the player reaches the edge of the map, slides along the edge
-    if (head.x < 0) head.x = 0;
-    if (head.y < 0) head.y = 0;
-    if (head.x > gameMap.width) head.x = gameMap.width;
-    if (head.y > gameMap.height) head.y = gameMap.height;
-
-    // then all the other body parts follow by moving to the position of the previous body part
-    for (let i = player.body.length - 1; i > 0; i--) {
-      const currentPart = player.body[i];
-      const previousPart = player.body[i - 1];
-      currentPart.x = previousPart.x;
-      currentPart.y = previousPart.y;
-    }
+    const head = getPlayerHead(player);
 
     // check for collisions with food. Radius of 10
     for (let i = 0; i < gameMap.food.length; i++) {
