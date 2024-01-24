@@ -12,7 +12,7 @@ const URL =
   process.env.NODE_ENV === "production" ? undefined : "http://localhost:4000";
 const socket = io(URL!, { autoConnect: false });
 
-export function useApi(username: string, serverUrl?: string) {
+export function useApi(username?: string, serverUrl?: string) {
   const {
     sharedState: { isConnected, me, scene },
     updateSharedState,
