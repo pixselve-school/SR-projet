@@ -34,12 +34,15 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
 
 // interval to refill the food
 setInterval(() => {
-  scene.addRandomFood(2);
+  scene.addRandomFood(100);
 }, 1000);
 
 setInterval(() => {
   scene.update();
-  io.emit(SOCKET_EVENTS.FRAME, scene.dto);
+
+  for (let player of scene.playerArray) {
+    player.socket.emit(SOCKET_EVENTS.FRAME, scene.povDto(player));
+  }
 }, 1000 / TPS);
 
 io.listen(4000);

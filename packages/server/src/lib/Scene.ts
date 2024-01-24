@@ -1,4 +1,5 @@
 import {
+  FIELD_OF_VIEW_RADIUS,
   FOOD_PICKUP_RADIUS,
   FoodDTO,
   MAP_HEIGHT,
@@ -29,7 +30,15 @@ export class Scene {
    * @param number number of food to add
    */
   public addRandomFood(number: number = 1) {
-    this.food = this.food.concat(randomFood(number));
+    for (let i = 0; i < number; i++) {
+      this.food.push({
+        id: uuidv4(),
+        position: {
+          x: Math.floor(Math.random() * this.width),
+          y: Math.floor(Math.random() * this.height),
+        },
+      });
+    }
   }
 
   /**
@@ -119,18 +128,33 @@ export class Scene {
       orbs: this.orbs,
     };
   }
-}
 
-export function randomFood(number: number = 1) {
-  const food: FoodDTO[] = [];
-  for (let i = 0; i < number; i++) {
-    food.push({
-      id: uuidv4(),
-      position: {
-        x: Math.floor(Math.random() * 1000),
-        y: Math.floor(Math.random() * 1000),
-      },
+  public povDto(player: Player): SceneDTO {
+    // Only send what the player can see in a radius of 100
+    const povPlayers = this.playerArray.filter((p) => {
+      return (
+        Math.abs(p.head.x - player.head.x) < FIELD_OF_VIEW_RADIUS &&
+        Math.abs(p.head.y - player.head.y) < FIELD_OF_VIEW_RADIUS
+      );
     });
+    const povFood = this.food.filter((f) => {
+      return (
+        Math.abs(f.position.x - player.head.x) < FIELD_OF_VIEW_RADIUS &&
+        Math.abs(f.position.y - player.head.y) < FIELD_OF_VIEW_RADIUS
+      );
+    });
+    const povOrbs = this.orbs.filter((o) => {
+      return (
+        Math.abs(o.position.x - player.head.x) < FIELD_OF_VIEW_RADIUS &&
+        Math.abs(o.position.y - player.head.y) < FIELD_OF_VIEW_RADIUS
+      );
+    });
+    return {
+      width: this.width,
+      height: this.height,
+      players: povPlayers.map((p) => p.dto),
+      food: povFood,
+      orbs: povOrbs,
+    };
   }
-  return food;
 }

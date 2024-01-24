@@ -53,8 +53,10 @@ export const SCORE_PER_FOOD = SCORE_PER_BODY_PART;
  */
 export const MIN_SCORE_TO_SPRINT = SCORE_PER_BODY_PART * 4;
 
-export const MAP_WIDTH = 1000;
-export const MAP_HEIGHT = 1000;
+export const MAP_WIDTH = 10000;
+export const MAP_HEIGHT = 10000;
+
+export const FIELD_OF_VIEW_RADIUS = 500;
 
 /**
  * Enum for socket events.
