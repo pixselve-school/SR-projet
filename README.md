@@ -23,24 +23,21 @@ packages/
 
 # MVP 
 
-- Players are dots
-- Players collect dots to gain points
-- Move towards mouse
-- Client - Serverr architecture
-- Client sends inputs each frames
-- Server sends game state each frames
+- [x] Players are dots
+- [x] Players collect dots to gain points
+- [x] Move towards mouse
+- [x] Client - Serverr architecture
+- [x] Client sends inputs each frames
+- [x] Server sends game state each frames
 
 # Improvement 1
 
-- Send to the client only the relevant informations
-- Player grow in length when collecting dots
+- [ ] Send to the client only the relevant informations
+- [x] Player grow in length when collecting dots
+- [x] Add a dash while pressing space bar
+- [x] Dash consume poing (and length)
 
 # Improvement 2
 
-- Collision between players to kill them
-- Death drop dots depending on your current score
-
-# Improvement 3
-
-- Add a dash while pressing space bar
-- Dash consume poing (and length)
+- [ ] Collision between players to kill them
+- [ ] Death drop dots depending on your current score
