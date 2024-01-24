@@ -8,7 +8,7 @@ import {
   SOCKET_EVENTS,
   TPS,
 } from "@viper-vortex/shared";
-import handleFrame from "./handleFrame";
+import handleFrame from "./handleFrame.js";
 
 const io = new Server({
   cors: {

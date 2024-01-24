@@ -7,7 +7,8 @@
   ],
   "scripts": {
     "dev": "concurrently -n \"░ client,█ server,▒ shared\" \"npm:dev --workspace=packages/client\" \"npm:start --workspace=packages/server\" \"npm:watch --workspace=packages/shared\"",
-    "build:client": "npm run build --workspace=packages/shared && npm run build --workspace=packages/client"
+    "build:client": "npm run build --workspace=packages/shared && npm run build --workspace=packages/client",
+    "build:server": "npm run build --workspace=packages/shared && npm run build --workspace=packages/server"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
