@@ -23,6 +23,11 @@ export const FOOD_PICKUP_RADIUS = 20;
 export const MAX_ANGLE = Math.PI / 20;
 
 /**
+ * The rate at which a player will drop an orb when sprinting.
+ */
+export const ORB_SPRINTING_DROP_RATE = 0.1;
+
+/**
  * Enum for socket events.
  * @enum {string}
  */

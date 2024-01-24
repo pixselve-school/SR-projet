@@ -6,6 +6,7 @@ export type GameMap = {
   height: number;
   players: Player[];
   food: Food[];
+  orbs: Orb[];
 };
 
 /**
@@ -17,8 +18,12 @@ export type Player = {
   name: string;
   color: string;
   isSprinting: boolean;
-  angle: number; // in radians
-  desiredAngle: number; // in radians
+  // in radians
+  angle: number;
+  // in radians
+  desiredAngle: number;
+  // 0 - 1: will vary based on `ORB_SPRINTING_DROP_RATE`
+  orbToDrop: number;
 };
 
 /**
@@ -29,7 +34,8 @@ export type Player = {
 export type Orb = {
   id: string;
   position: Position;
-  size: number; // 1 - 10
+  // 1 - 10
+  size: number;
 };
 
 /**

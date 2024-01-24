@@ -116,6 +116,16 @@ export function Canvas({ centered }: { centered?: boolean }) {
       c.fill();
     });
 
+    // Draw all orbs
+    api.scene.orbs.forEach((orb) => {
+      const screenOrb = worldToScreen(orb.position, camera);
+      c.beginPath();
+      c.arc(screenOrb.x, screenOrb.y, 5 * orb.size, 0, 2 * Math.PI); // Draw a circle for each orb
+      // use blue color
+      c.fillStyle = "blue";
+      c.fill();
+    });
+
     // Draw all players
     api.scene.players.forEach((player) => {
       player.body.forEach((bodyPart) => {

@@ -13,6 +13,7 @@ export function newGameMap(): GameMap {
     height: 1000,
     players: [],
     food: randomFood(AMOUNT_OF_FOOD),
+    orbs: [],
   };
 }
 

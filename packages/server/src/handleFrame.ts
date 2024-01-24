@@ -6,6 +6,7 @@ import {
   Player,
   SPRINT_SPEED,
   MAX_ANGLE,
+  ORB_SPRINTING_DROP_RATE,
 } from "@viper-vortex/shared";
 
 function movePlayer(player: Player, gameMap: GameMap) {
@@ -14,6 +15,20 @@ function movePlayer(player: Player, gameMap: GameMap) {
 
   const head = getPlayerHead(player);
   const speed = player.isSprinting ? SPRINT_SPEED : BASE_SPEED;
+
+  if (player.isSprinting) {
+    player.orbToDrop += ORB_SPRINTING_DROP_RATE;
+    if (player.orbToDrop >= 1) {
+      player.orbToDrop -= 1;
+      // drop an orb
+      const lastBodyPart = player.body[player.body.length - 1];
+      gameMap.orbs.push({
+        id: Math.random().toString(),
+        position: { x: lastBodyPart.x, y: lastBodyPart.y },
+        size: 1,
+      });
+    }
+  }
 
   const currentAngle = player.angle;
   const targetAngle = player.desiredAngle;
@@ -70,8 +85,8 @@ export default function handleFrame(
         gameMap.food.splice(i, 1);
         // add a new body part
         player.body.push({
-          x: player.body[player.body.length - 1].x + 2,
-          y: player.body[player.body.length - 1].y + 2,
+          x: player.body[player.body.length - 1].x,
+          y: player.body[player.body.length - 1].y,
         });
       }
     }
