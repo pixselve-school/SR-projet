@@ -1,29 +1,23 @@
 "use client";
 
 import { useApi } from '@/hooks/useApi';
+import { useGame } from '@/hooks/useGame';
 import { useMouse } from '@/hooks/useMouse';
 import { useScreen } from '@/hooks/useScreen';
-import { Game, type Params } from '@/lib/Game';
+import { type Params } from '@/lib/Game';
 import { useEffect, useRef } from 'react';
 
-export type Camera = {
-  offset: {
-    x: number;
-    y: number;
-  };
-  zoom: number;
-}
-
-const game = new Game();
 
 export function Canvas(params: Params) {
   const api = useApi();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const cursorScreen = useMouse(canvasRef)
   const screen = useScreen();
-
+  const game = useGame();
   useEffect(() => {
+    if (!game) return;
     function handleKeyDown(e: KeyboardEvent) {
+      if (!game) return;
       // esacpe
       if (e.key === 'Escape') {
         game.togglePause();
@@ -34,18 +28,21 @@ export function Canvas(params: Params) {
       }
     }
     function handleKeyUp(e: KeyboardEvent) {
+      if (!game) return;
       // space
       if (e.key === ' ') {
         game.setSpriniting(false);
       }
     }
-
+    
     function handleMouseDown(e: MouseEvent) {
+      if (!game) return;
       if (e.button === 0) {
         game.setSpriniting(true);
       }
     }
     function handleMouseUp(e: MouseEvent) {
+      if (!game) return;
       if (e.button === 0) {
         game.setSpriniting(false);
       }
@@ -61,34 +58,40 @@ export function Canvas(params: Params) {
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
     }
-  }, []);
+  }, [game]);
 
   useEffect(() => {
+    if (!game) return;
     game.setApi(api);
-  }, [api]);
+  }, [api, game]);
 
   useEffect(() => {
+    if (!game) return;
     game.setCursor(cursorScreen);
-  }, [cursorScreen]);
+  }, [cursorScreen, game]);
 
   useEffect(() => {
+    if (!game) return;
     const c = canvasRef.current?.getContext('2d');
     if (!c) return;
     game.setContext(c);
-  }, []);
+  }, [game]);
 
   useEffect(() => {
+    if (!game) return;
     game.updateParams(params);
-  }, [params]);
+  }, [game, params]);
 
   useEffect(() => {
+    if (!game) return;
     game.setScreenSize(screen);
-  }, [screen]);
+  }, [game, screen]);
 
   useEffect(() => {
+    if (!game) return;
     if (!api.scene) return;
     game.setScene(api.scene);
-  }, [api.scene]);
+  }, [api.scene, game]);
 
   return <canvas ref={canvasRef} className='w-full h-full' height={screen.height} width={screen.width} />;
 }

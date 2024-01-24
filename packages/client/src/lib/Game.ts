@@ -1,6 +1,5 @@
-import { type Camera } from "@/app/canvas";
 import { screenToWorld, worldToScreen } from "@/utils/position";
-import { type GameMap, type Position } from "@viper-vortex/shared";
+import { type SceneDTO, type Position } from "@viper-vortex/shared";
 import { type Api } from "@/hooks/useApi";
 import { Orb } from "./Orb";
 import { Player } from "./Player";
@@ -10,6 +9,15 @@ import { MyPlayer } from "./MyPlayer";
 export type Params = {
   centered: boolean;
 };
+
+export type Camera = {
+  offset: {
+    x: number;
+    y: number;
+  };
+  zoom: number;
+}
+
 export class Game {
   private players: Record<string, Player> = {};
   private orbs: Record<string, Orb> = {};
@@ -34,12 +42,16 @@ export class Game {
     console.log("Game Instance Created");
   }
 
-  setScene(map: GameMap) {
-    this.mapSize.width = map.width;
-    this.mapSize.height = map.height;
+  destroy() {
+    console.log("Game Instance Destroyed");
+  }
+
+  setScene(scene: SceneDTO) {
+    this.mapSize.width = scene.width;
+    this.mapSize.height = scene.height;
 
     const notSeen = new Set(Object.keys(this.players));
-    map.players.forEach((player) => {
+    scene.players.forEach((player) => {
       notSeen.delete(player.id);
       if (this.api?.socket?.id && player.id === this.api?.socket.id) {
         if (!this.me) this.me = new MyPlayer(player, this);
@@ -55,7 +67,7 @@ export class Game {
     notSeen.forEach((id) => delete this.players[id]);
 
     const notSeenFood = new Set(Object.keys(this.orbs));
-    map.food.forEach((food) => {
+    scene.food.forEach((food) => {
       notSeenFood.delete(food.id);
       if (!this.orbs[food.id]) {
         this.orbs[food.id] = new Orb(food, this);
@@ -168,7 +180,7 @@ export class Game {
     }
 
     // show fps top right
-    this.c.fillStyle = "black";
+    this.c.fillStyle = "white";
     this.c.font = "20px Arial";
     this.c.textAlign = "right";
     this.c.fillText(

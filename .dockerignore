@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/out
+.git
+**/.next
+**/.DS_Store
+.github
+.vscode
+ESIR-SR-PM-V2_3.pdf
+LICENSE
+README.md

@@ -1,18 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
-import { FoodDTO, GameMap } from "./types";
+import { FoodDTO, SceneDTO, PlayerDTO } from "./types";
 
 /**
  * Create a new game map.
- * @returns {GameMap} The new game map.
+ * @returns {SceneDTO} The new game map.
  * @todo Handle food.
  */
-export function newGameMap(): GameMap {
+export function newScene(): SceneDTO {
   const AMOUNT_OF_FOOD = 100;
   return {
     width: 1000,
     height: 1000,
     players: [],
     food: randomFood(AMOUNT_OF_FOOD),
+    orbs: [],
   };
 }
 
@@ -28,4 +29,13 @@ export function randomFood(number: number = 1) {
     });
   }
   return food;
+}
+
+export function randomDarkColor() {
+  const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  return "#" + randomColor;
+}
+
+export function getPlayerHead(player: PlayerDTO) {
+  return player.body[0];
 }

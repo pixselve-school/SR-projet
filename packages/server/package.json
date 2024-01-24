@@ -2,7 +2,9 @@
   "name": "@viper-vortex/server",
   "type": "module",
   "scripts": {
-    "start": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node ./dist/index.js"
   },
   "dependencies": {
     "socket.io": "^4.7.4",

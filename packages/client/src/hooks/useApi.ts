@@ -1,22 +1,27 @@
 import { useSharedState } from "@/lib/shared-state";
 import {
   SOCKET_EVENTS,
-  type GameMap,
-  type PlayerMove,
+  type SceneDTO,
+  type PlayerMoveDTO,
 } from "@viper-vortex/shared";
 import { useCallback, useEffect } from "react";
 import { io } from "socket.io-client";
 
-export function useApi(serverUrl?: string) {
+export function useApi() {
   const {
     sharedState: { isConnected, scene, socket },
     updateState,
   } = useSharedState();
 
-  const connect = useCallback(() => {
-    const socket = io(serverUrl!, { autoConnect: true });
-    updateState({ socket });
-  }, [serverUrl, updateState]);
+  const connect = useCallback(
+    (serverUrl: string, username: string) => {
+      if (socket) socket.disconnect();
+      const newSocket = io(serverUrl, { autoConnect: true });
+      newSocket.emit(SOCKET_EVENTS.JOIN, username);
+      updateState({ socket: newSocket });
+    },
+    [socket, updateState],
+  );
 
   const disconnect = useCallback(() => {
     socket?.disconnect();
@@ -24,7 +29,7 @@ export function useApi(serverUrl?: string) {
   }, [socket, updateState]);
 
   const move = useCallback(
-    (move: PlayerMove) => {
+    (move: PlayerMoveDTO) => {
       socket?.emit(SOCKET_EVENTS.MOVE, move);
     },
     [socket],
@@ -37,7 +42,7 @@ export function useApi(serverUrl?: string) {
     function handleDisconnect() {
       updateState({ isConnected: false });
     }
-    function handleFrame(scene: GameMap) {
+    function handleFrame(scene: SceneDTO) {
       updateState({ scene });
     }
     socket?.on("connect", handleConnect);

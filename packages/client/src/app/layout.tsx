@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { SharedStateProvider } from '@/lib/shared-state';
 import "@/styles/globals.css";
@@ -8,6 +8,7 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
 
 export default function RootLayout({
   children,

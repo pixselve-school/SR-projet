@@ -1,12 +1,13 @@
 /**
  * Represents a game map.
  */
-export type GameMap = {
+export type SceneDTO = {
   width: number;
   height: number;
   players: PlayerDTO[];
   food: FoodDTO[]
-}
+  orbs: OrbDTO[];
+};
 
 /**
  * Represents a player.
@@ -17,8 +18,32 @@ export type PlayerDTO = {
   name: string;
   color: string;
   isSprinting: boolean;
+  // in radians
   angle: number;
-}
+  // in radians
+  desiredAngle: number;
+  // 0 - 1: will vary based on `ORB_SPRINTING_DROP_RATE`
+  orbToDrop: number;
+  score: number;
+};
+
+/**
+ * Represents an orb. Orbs are used to grow the player.
+ * They are dropped by players when they die.
+ * They are also dropped when a player sprints.
+ */
+export type OrbDTO = {
+  id: string;
+  position: Position;
+  // 1 - 10
+  size: number;
+};
+
+
+export type FoodDTO = {
+  id: string;
+  position: Position;
+};
 
 /**
  * Represents a coordinate.
@@ -26,17 +51,12 @@ export type PlayerDTO = {
 export type Position = {
   x: number;
   y: number;
-}
-
-export type FoodDTO = {
-  id: string;
-  position: Position;
-}
+};
 
 /**
  * Represents a player move.
  */
-export type PlayerMove = {
+export type PlayerMoveDTO = {
   angle: number;
   isSprinting: boolean;
-}
+};

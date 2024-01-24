@@ -1,10 +1,11 @@
-// SharedStateContext.js
-import { type GameMap } from '@viper-vortex/shared';
+"use client"
+
+import { type SceneDTO } from '@viper-vortex/shared';
 import { createContext, useContext, useState } from "react";
 import { type Socket } from 'socket.io-client';
 
 type SharedState = {
-  scene?: GameMap;
+  scene?: SceneDTO;
   isConnected?: boolean;
   socket?: Socket;
 }
