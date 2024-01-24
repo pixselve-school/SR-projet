@@ -9,7 +9,7 @@ import logo from "../assets/logo.png";
 export default function HomePage() {
   const [serverUrl, setServerUrl] = useState<string>("http://localhost:4000");
   const api = useApi(serverUrl);
-  const [isCentered, setIsCentered] = useState<boolean>(true);
+  const [isCentered, setIsCentered] = useState<boolean>(false);
   const [username, setUsername] = useState("");
 
   return (
