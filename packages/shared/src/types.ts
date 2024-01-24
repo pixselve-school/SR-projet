@@ -22,6 +22,17 @@ export type Player = {
 };
 
 /**
+ * Represents an orb. Orbs are used to grow the player.
+ * They are dropped by players when they die.
+ * They are also dropped when a player sprints.
+ */
+export type Orb = {
+  id: string;
+  position: Position;
+  size: number; // 1 - 10
+};
+
+/**
  * Represents a coordinate.
  */
 export type Position = {
