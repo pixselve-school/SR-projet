@@ -12,7 +12,7 @@ import handleFrame from "./handleFrame.js";
 
 const io = new Server({
   cors: {
-    origin: "*",
+    origin: "*", //TODO: change this to the actual frontend url
   },
 });
 
