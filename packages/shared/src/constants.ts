@@ -31,7 +31,12 @@ export const ORB_SPRINTING_DROP_RATE = 0.1;
  * The amount of score gained/lost per orb.
  * You lose orbs when sprinting.
  */
-export const SCORE_PER_ORB = 5;
+export const SCORE_PER_LOST_ORB = 10;
+
+/**
+ * The amount of score gained per orb.
+ */
+export const SCORE_PER_GAINED_ORB = SCORE_PER_LOST_ORB * 0.3;
 
 /**
  * The amount of score required for each body part.

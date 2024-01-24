@@ -7,10 +7,11 @@ import {
   SPRINT_SPEED,
   MAX_ANGLE,
   ORB_SPRINTING_DROP_RATE,
-  SCORE_PER_ORB,
   MIN_SCORE_TO_SPRINT,
   SCORE_PER_FOOD,
   SCORE_PER_BODY_PART,
+  SCORE_PER_GAINED_ORB,
+  SCORE_PER_LOST_ORB,
 } from "@viper-vortex/shared";
 
 function movePlayer(player: Player, gameMap: GameMap) {
@@ -37,7 +38,7 @@ function movePlayer(player: Player, gameMap: GameMap) {
         position: { x: lastBodyPart.x, y: lastBodyPart.y },
         size: 1,
       });
-      player.score -= SCORE_PER_ORB;
+      player.score -= SCORE_PER_LOST_ORB;
     }
   }
 
@@ -131,7 +132,7 @@ export default function handleFrame(
         // remove the orb
         gameMap.orbs.splice(i, 1);
         // add score
-        player.score += SCORE_PER_ORB;
+        player.score += SCORE_PER_GAINED_ORB;
       }
     }
 
