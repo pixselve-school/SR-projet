@@ -48,6 +48,7 @@ export class Player {
       name: this.name,
       color: this.color,
       body: this.body,
+      score: this.score,
     };
   }
 
