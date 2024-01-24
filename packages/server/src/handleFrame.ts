@@ -24,12 +24,12 @@ export default function handleFrame(gameMap: GameMap) {
     }
 
     // check for collisions with food. Radius of 10
-    const RADIUS = 10;
+    const RADIUS = 20;
     for (let i = 0; i < gameMap.food.length; i++) {
       const food = gameMap.food[i];
       if (
-        Math.abs(food.x - head.x) < RADIUS &&
-        Math.abs(food.y - head.y) < RADIUS
+        Math.abs(food.position.x - head.x) < RADIUS &&
+        Math.abs(food.position.y - head.y) < RADIUS
       ) {
         // collision
         // remove the food
