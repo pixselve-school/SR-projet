@@ -8,6 +8,9 @@ await import("./src/env.js");
 const config = {
   output: "export",
   basePath: "/SR-projet",
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default config;
