@@ -10,7 +10,7 @@ export const BASE_SPEED = 2;
 /**
  * The speed at which the player moves when sprinting.
  */
-export const SPRINT_SPEED = 20;
+export const SPRINT_SPEED = 5;
 
 /**
  * The radius of the player's head.
@@ -52,6 +52,9 @@ export const SCORE_PER_FOOD = SCORE_PER_BODY_PART;
  * The minimum score required to sprint.
  */
 export const MIN_SCORE_TO_SPRINT = SCORE_PER_BODY_PART * 4;
+
+export const MAP_WIDTH = 1000;
+export const MAP_HEIGHT = 1000;
 
 /**
  * Enum for socket events.

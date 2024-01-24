@@ -5,7 +5,7 @@ export type SceneDTO = {
   width: number;
   height: number;
   players: PlayerDTO[];
-  food: FoodDTO[]
+  food: FoodDTO[];
   orbs: OrbDTO[];
 };
 
@@ -17,14 +17,6 @@ export type PlayerDTO = {
   id: string;
   name: string;
   color: string;
-  isSprinting: boolean;
-  // in radians
-  angle: number;
-  // in radians
-  desiredAngle: number;
-  // 0 - 1: will vary based on `ORB_SPRINTING_DROP_RATE`
-  orbToDrop: number;
-  score: number;
 };
 
 /**
@@ -38,7 +30,6 @@ export type OrbDTO = {
   // 1 - 10
   size: number;
 };
-
 
 export type FoodDTO = {
   id: string;

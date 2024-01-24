@@ -39,5 +39,5 @@ packages/
 
 # Improvement 2
 
-- [ ] Collision between players to kill them
+- [x] Collision between players to kill them
 - [ ] Death drop dots depending on your current score
