@@ -8,7 +8,7 @@ import { Canvas } from './canvas';
 
 export default function HomePage() {
   const [serverUrl, setServerUrl] = useState<string>("http://localhost:4000");
-  const [isCentered, setIsCentered] = useState<boolean>(false);
+  const [isCentered, setIsCentered] = useState<boolean>(true);
   const [username, setUsername] = useState("");
   const api = useApi();
 
