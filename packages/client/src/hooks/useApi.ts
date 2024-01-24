@@ -4,72 +4,60 @@ import {
   type GameMap,
   type PlayerMove,
 } from "@viper-vortex/shared";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { io } from "socket.io-client";
-
-// "undefined" means the URL will be computed from the `window.location` object
-const URL =
-  process.env.NODE_ENV === "production" ? undefined : "http://localhost:4000";
-const socket = io(URL!, { autoConnect: false });
 
 export function useApi(serverUrl?: string) {
   const {
-    sharedState: { isConnected, me, scene },
-    updateSharedState,
+    sharedState: { isConnected, scene, socket },
+    updateState,
   } = useSharedState();
 
-  useEffect(() => {
-    if (serverUrl) {
-      // @ts-expect-error force the URL to be updated
-      socket.io.uri = serverUrl;
-      socket.disconnect().connect();
-    }
-  }, [serverUrl]);
+  const connect = useCallback(() => {
+    const socket = io(serverUrl!, { autoConnect: true });
+    updateState({ socket });
+  }, [serverUrl, updateState]);
 
-  useEffect(() => {
-    if (!scene) return;
-    const newMe = scene.players.find((p) => p.id === socket.id);
-    if (JSON.stringify(newMe) !== JSON.stringify(me)) {
-      updateSharedState({ me: newMe });
-    }
-  }, [me, scene, updateSharedState]);
+  const disconnect = useCallback(() => {
+    socket?.disconnect();
+    updateState({ socket: undefined });
+  }, [socket, updateState]);
+
+  const move = useCallback(
+    (move: PlayerMove) => {
+      socket?.emit(SOCKET_EVENTS.MOVE, move);
+    },
+    [socket],
+  );
 
   useEffect(() => {
     function handleConnect() {
-      updateSharedState({ isConnected: true });
+      updateState({ isConnected: true });
     }
     function handleDisconnect() {
-      updateSharedState({ isConnected: false });
+      updateState({ isConnected: false });
     }
     function handleFrame(scene: GameMap) {
-      updateSharedState({ scene });
+      updateState({ scene });
     }
-    socket.on("connect", handleConnect);
-    socket.on("disconnect", handleDisconnect);
-    socket.on(SOCKET_EVENTS.FRAME, handleFrame);
+    socket?.on("connect", handleConnect);
+    socket?.on("disconnect", handleDisconnect);
+    socket?.on(SOCKET_EVENTS.FRAME, handleFrame);
     return () => {
-      socket.off("connect", handleConnect);
-      socket.off("disconnect", handleDisconnect);
-      socket.off(SOCKET_EVENTS.FRAME, handleFrame);
+      socket?.off("connect", handleConnect);
+      socket?.off("disconnect", handleDisconnect);
+      socket?.off(SOCKET_EVENTS.FRAME, handleFrame);
     };
-  }, [updateSharedState]);
+  }, [updateState, socket]);
 
   return {
-    connect: () => {
-      socket.connect();
-    },
+    connect,
     socket,
-    onDisconnect: (fn: () => void) => {
-      socket.on("disconnect", fn);
-    },
-    onConnect: (fn: () => void) => {
-      socket.on("connect", fn);
-    },
-    move: (move: PlayerMove) => {
-      socket.emit(SOCKET_EVENTS.MOVE, move);
-    },
+    disconnect,
+    move,
     scene,
     isConnected,
-    me,
   };
 }
+
+export type Api = ReturnType<typeof useApi>;

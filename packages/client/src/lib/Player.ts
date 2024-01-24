@@ -1,6 +1,7 @@
 import { worldToScreen } from "@/utils/position";
 import { type PlayerDTO, type Position } from "@viper-vortex/shared";
-import { Entity, type UpdateContext } from "./Entity";
+import { Entity } from "./Entity";
+import { type Game } from "./Game";
 
 export class Player extends Entity {
   body: Position[];
@@ -9,8 +10,8 @@ export class Player extends Entity {
   isSprinting: boolean;
   angle: number;
 
-  constructor(p: PlayerDTO) {
-    super(p.id);
+  constructor(p: PlayerDTO, game: Game) {
+    super(p.id, game);
     this.body = p.body;
     this.name = p.name;
     this.color = p.color;
@@ -26,31 +27,32 @@ export class Player extends Entity {
     this.angle = p.angle;
   }
 
-  draw({ c, camera }: UpdateContext): void {
+  draw(): void {
+    const c = this.game.c;
+    if (!c || this.body.length === 0) return;
 
-    // if (IS ME) {
-    //   const playerHead = this.getHead();
-    //   if (playerHead) {
-    //     const screenHead = worldToScreen(playerHead, camera);
-    //     const screenCurPos = worldToScreen(cursor, camera);
-    //     c.beginPath();
-    //     c.moveTo(screenHead.x, screenHead.y);
-    //     c.lineTo(screenCurPos.x, screenCurPos.y);
-    //     c.fillStyle = 'red';
-    //     c.strokeStyle = 'red';
-    //     c.stroke();
-    //   }
-    // }
+    c.beginPath();
 
-    this.body.forEach((bodyPart) => {
-      const screenBodyPart = worldToScreen(bodyPart, camera);
-      c.beginPath();
-      c.arc(screenBodyPart.x, screenBodyPart.y, 10, 0, 2 * Math.PI);
-      c.fillStyle = this.color;
-      c.fill();
-      c.strokeStyle = this.color;
-      c.stroke();
+    let prevScreenBodyPart = worldToScreen(this.body[0]!, this.game.camera);
+    c.moveTo(prevScreenBodyPart.x, prevScreenBodyPart.y);
+
+    this.body.forEach((bodyPart, index) => {
+      if (index === 0) return;
+      const screenBodyPart = worldToScreen(bodyPart, this.game.camera);
+      c.lineTo(screenBodyPart.x, screenBodyPart.y);
+      prevScreenBodyPart = screenBodyPart;
     });
+
+    if (this.body.length === 1) {
+      c.lineTo(prevScreenBodyPart.x, prevScreenBodyPart.y);
+    }
+
+    c.lineWidth = 20;
+    c.strokeStyle = this.color;
+    c.lineCap = "round";
+    c.lineJoin = "round";
+
+    c.stroke();
   }
 
   getHead() {
