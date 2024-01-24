@@ -7,24 +7,18 @@ export class Player extends Entity {
   body: Position[];
   name: string;
   color: string;
-  isSprinting: boolean;
-  angle: number;
 
   constructor(p: PlayerDTO, game: Game) {
     super(p.id, game);
     this.body = p.body;
     this.name = p.name;
     this.color = p.color;
-    this.isSprinting = p.isSprinting;
-    this.angle = p.angle;
   }
 
   update(p: PlayerDTO) {
     this.body = p.body;
     this.name = p.name;
     this.color = p.color;
-    this.isSprinting = p.isSprinting;
-    this.angle = p.angle;
   }
 
   draw(): void {
