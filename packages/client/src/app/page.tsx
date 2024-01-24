@@ -33,6 +33,17 @@ export default function HomePage() {
         />
         <label htmlFor="centered">centered</label>
       </div>
+
+      <div className="absolute right-0 top-0 bg-gray-400 p-4">
+        <div className="font-bold">Score</div>
+        <ul>
+          {api.scene?.players.map((player) => (
+            <li key={player.id}>
+              {player.name}: {player.score}
+            </li>
+          ))}
+        </ul>
+      </div>
       {api.isConnected && api.scene && <Canvas centered={isCentered} />}
     </main>
   );
