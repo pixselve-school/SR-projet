@@ -24,6 +24,7 @@ export type Player = {
   desiredAngle: number;
   // 0 - 1: will vary based on `ORB_SPRINTING_DROP_RATE`
   orbToDrop: number;
+  score: number;
 };
 
 /**

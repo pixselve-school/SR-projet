@@ -110,7 +110,7 @@ export function Canvas({ centered }: { centered?: boolean }) {
     api.scene.food.forEach((food) => {
       const screenFood = worldToScreen(food.position, camera);
       c.beginPath();
-      c.arc(screenFood.x, screenFood.y, 10, 0, 2 * Math.PI); // Draw a circle for each food
+      c.arc(screenFood.x, screenFood.y, 7, 0, 2 * Math.PI); // Draw a circle for each food
       // use green color
       c.fillStyle = "green";
       c.fill();
@@ -120,7 +120,7 @@ export function Canvas({ centered }: { centered?: boolean }) {
     api.scene.orbs.forEach((orb) => {
       const screenOrb = worldToScreen(orb.position, camera);
       c.beginPath();
-      c.arc(screenOrb.x, screenOrb.y, 5 * orb.size, 0, 2 * Math.PI); // Draw a circle for each orb
+      c.arc(screenOrb.x, screenOrb.y, 3 * orb.size, 0, 2 * Math.PI); // Draw a circle for each orb
       // use blue color
       c.fillStyle = "blue";
       c.fill();

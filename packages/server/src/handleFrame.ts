@@ -7,6 +7,10 @@ import {
   SPRINT_SPEED,
   MAX_ANGLE,
   ORB_SPRINTING_DROP_RATE,
+  SCORE_PER_ORB,
+  MIN_SCORE_TO_SPRINT,
+  SCORE_PER_FOOD,
+  SCORE_PER_BODY_PART,
 } from "@viper-vortex/shared";
 
 function movePlayer(player: Player, gameMap: GameMap) {
@@ -14,6 +18,12 @@ function movePlayer(player: Player, gameMap: GameMap) {
   // start with the head
 
   const head = getPlayerHead(player);
+
+  // can the player sprint?
+  if (player.score < MIN_SCORE_TO_SPRINT) {
+    player.isSprinting = false;
+  }
+
   const speed = player.isSprinting ? SPRINT_SPEED : BASE_SPEED;
 
   if (player.isSprinting) {
@@ -27,6 +37,7 @@ function movePlayer(player: Player, gameMap: GameMap) {
         position: { x: lastBodyPart.x, y: lastBodyPart.y },
         size: 1,
       });
+      player.score -= SCORE_PER_ORB;
     }
   }
 
@@ -83,11 +94,8 @@ export default function handleFrame(
         // collision
         // remove the food
         gameMap.food.splice(i, 1);
-        // add a new body part
-        player.body.push({
-          x: player.body[player.body.length - 1].x,
-          y: player.body[player.body.length - 1].y,
-        });
+        // add score
+        player.score += SCORE_PER_FOOD;
       }
     }
 
@@ -110,6 +118,38 @@ export default function handleFrame(
           break;
         }
       }
+    }
+
+    // Check for collisions with orbs
+    for (let i = 0; i < gameMap.orbs.length; i++) {
+      const orb = gameMap.orbs[i];
+      if (
+        Math.abs(orb.position.x - head.x) < FOOD_PICKUP_RADIUS &&
+        Math.abs(orb.position.y - head.y) < FOOD_PICKUP_RADIUS
+      ) {
+        // collision
+        // remove the orb
+        gameMap.orbs.splice(i, 1);
+        // add score
+        player.score += SCORE_PER_ORB;
+      }
+    }
+
+    // Update the player's body based on the score
+    // Minimum length of 1 (the head)
+    const bodyLength = Math.max(
+      1,
+      Math.floor(player.score / SCORE_PER_BODY_PART),
+    );
+
+    while (player.body.length < bodyLength) {
+      player.body.push({
+        x: player.body[player.body.length - 1].x,
+        y: player.body[player.body.length - 1].y,
+      });
+    }
+    while (player.body.length > bodyLength) {
+      player.body.pop();
     }
   }
 }

@@ -28,6 +28,27 @@ export const MAX_ANGLE = Math.PI / 20;
 export const ORB_SPRINTING_DROP_RATE = 0.1;
 
 /**
+ * The amount of score gained/lost per orb.
+ * You lose orbs when sprinting.
+ */
+export const SCORE_PER_ORB = 5;
+
+/**
+ * The amount of score required for each body part.
+ */
+export const SCORE_PER_BODY_PART = 10;
+
+/**
+ * The amount of score gained per food.
+ */
+export const SCORE_PER_FOOD = SCORE_PER_BODY_PART;
+
+/**
+ * The minimum score required to sprint.
+ */
+export const MIN_SCORE_TO_SPRINT = SCORE_PER_BODY_PART * 4;
+
+/**
  * Enum for socket events.
  * @enum {string}
  */

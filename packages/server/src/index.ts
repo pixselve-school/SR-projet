@@ -37,6 +37,7 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
     angle: 0,
     desiredAngle: 0,
     orbToDrop: 0,
+    score: 0,
   };
 
   gameMap.players.push(player);
