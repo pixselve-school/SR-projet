@@ -41,7 +41,7 @@ jobs:
         run: npm install
 
       - name: Build the client
-        run: npm run build
+        run: npm run build:client
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
