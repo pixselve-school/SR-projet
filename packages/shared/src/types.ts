@@ -1,18 +1,18 @@
 /**
  * Represents a game map.
  */
-export type GameMap = {
+export type SceneDTO = {
   width: number;
   height: number;
-  players: Player[];
-  food: Food[];
-  orbs: Orb[];
+  players: PlayerDTO[];
+  food: FoodDTO[]
+  orbs: OrbDTO[];
 };
 
 /**
  * Represents a player.
  */
-export type Player = {
+export type PlayerDTO = {
   body: Position[];
   id: string;
   name: string;
@@ -32,11 +32,17 @@ export type Player = {
  * They are dropped by players when they die.
  * They are also dropped when a player sprints.
  */
-export type Orb = {
+export type OrbDTO = {
   id: string;
   position: Position;
   // 1 - 10
   size: number;
+};
+
+
+export type FoodDTO = {
+  id: string;
+  position: Position;
 };
 
 /**
@@ -47,15 +53,10 @@ export type Position = {
   y: number;
 };
 
-export type Food = {
-  id: string;
-  position: Position;
-};
-
 /**
  * Represents a player move.
  */
-export type PlayerMove = {
+export type PlayerMoveDTO = {
   angle: number;
   isSprinting: boolean;
 };

@@ -1,13 +1,13 @@
-import { Server, Socket } from "socket.io";
 import {
-  GameMap,
-  newGameMap,
-  Player,
-  randomDarkColor,
-  randomFood,
+  SceneDTO,
+  PlayerDTO,
   SOCKET_EVENTS,
   TPS,
+  newScene,
+  randomDarkColor,
+  randomFood
 } from "@viper-vortex/shared";
+import { Server, Socket } from "socket.io";
 import handleFrame from "./handleFrame.js";
 
 const io = new Server({
@@ -16,7 +16,7 @@ const io = new Server({
   },
 });
 
-const gameMap: GameMap = newGameMap();
+const gameMap: SceneDTO = newScene();
 
 // interval to refill the food
 setInterval(() => {
@@ -28,7 +28,7 @@ const playerToSocket = new Map<string, Socket>();
 io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   console.log(`New connection: ${socket.id}`);
 
-  const player: Player = {
+  const player: PlayerDTO = {
     id: socket.id,
     name: "TEMP USERNAME",
     color: randomDarkColor(),

@@ -1,16 +1,16 @@
 "use client";
 
 import { useApi } from "@/hooks/useApi";
-import { Canvas } from "./canvas";
-import { SVGProps, useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 import logo from "../assets/logo.png";
+import { Canvas } from './canvas';
 
 export default function HomePage() {
   const [serverUrl, setServerUrl] = useState<string>("http://localhost:4000");
   const [isCentered, setIsCentered] = useState<boolean>(false);
   const [username, setUsername] = useState("");
-  const api = useApi(username, serverUrl);
+  const api = useApi();
 
   return (
     <main className="dustBackground flex h-full flex-col items-center justify-center">
@@ -34,7 +34,7 @@ export default function HomePage() {
         <label htmlFor="centered">centered</label>
       </div>
 
-      <div className="absolute right-0 top-0 bg-gray-400 p-4">
+      <div className="absolute right-0 bg-gray-400 p-4">
         <div className="font-bold">Score</div>
         <ul>
           {api.scene?.players.map((player) => (
@@ -82,7 +82,9 @@ function LoginComponent(props: {
       />
 
       <button
-        onClick={props.api.connect}
+        onClick={()=>{
+          props.api.connect(props.serverUrl, props.username);
+        }}
         disabled={!props.username || !props.serverUrl}
         className="w-full rounded-full bg-red-500 py-2 text-2xl font-bold ring-4 ring-red-500/50 ring-offset-8 ring-offset-red-950 transition-transform hover:scale-105 disabled:bg-gray-500 disabled:ring-gray-500/50"
       >

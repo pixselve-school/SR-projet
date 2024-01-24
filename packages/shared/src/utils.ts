@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
-import { Food, GameMap, Player } from "./types";
+import { FoodDTO, SceneDTO, PlayerDTO } from "./types";
 
 /**
  * Create a new game map.
- * @returns {GameMap} The new game map.
+ * @returns {SceneDTO} The new game map.
  * @todo Handle food.
  */
-export function newGameMap(): GameMap {
+export function newScene(): SceneDTO {
   const AMOUNT_OF_FOOD = 100;
   return {
     width: 1000,
@@ -18,7 +18,7 @@ export function newGameMap(): GameMap {
 }
 
 export function randomFood(number: number = 1) {
-  const food: Food[] = [];
+  const food: FoodDTO[] = [];
   for (let i = 0; i < number; i++) {
     food.push({
       id: uuidv4(),
@@ -36,6 +36,6 @@ export function randomDarkColor() {
   return "#" + randomColor;
 }
 
-export function getPlayerHead(player: Player) {
+export function getPlayerHead(player: PlayerDTO) {
   return player.body[0];
 }
