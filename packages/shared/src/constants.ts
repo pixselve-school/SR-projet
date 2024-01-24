@@ -4,6 +4,11 @@ export const BASE_SPEED = 2;
 export const SPRINT_SPEED = 5;
 
 /**
+ * The radius of the player's head.
+ */
+export const FOOD_PICKUP_RADIUS = 20;
+
+/**
  * Enum for socket events.
  * @enum {string}
  */
@@ -12,4 +17,5 @@ export enum SOCKET_EVENTS {
   DISCONNECT = "disconnect",
   MOVE = "move",
   FRAME = "frame",
+  DEATH = "death",
 }

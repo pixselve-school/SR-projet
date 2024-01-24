@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import {
   GameMap,
   newGameMap,
@@ -23,6 +23,8 @@ setInterval(() => {
   gameMap.food = gameMap.food.concat(randomFood(2));
 }, 1000);
 
+const playerToSocket = new Map<string, Socket>();
+
 io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   console.log(`New connection: ${socket.id}`);
 
@@ -36,12 +38,14 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   };
 
   gameMap.players.push(player);
+  playerToSocket.set(socket.id, socket);
 
   socket.on(SOCKET_EVENTS.DISCONNECT, () => {
     console.log(`Player ${socket.id} disconnected`);
     const index = gameMap.players.findIndex((p) => p.id === socket.id);
     if (index === -1) return;
     gameMap.players.splice(index, 1);
+    playerToSocket.delete(socket.id);
   });
 
   socket.on(SOCKET_EVENTS.MOVE, (move) => {
@@ -52,8 +56,16 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
 });
 
 setInterval(() => {
-  handleFrame(gameMap);
+  handleFrame(gameMap, onPlayerDeath);
   io.emit(SOCKET_EVENTS.FRAME, gameMap);
 }, 1000 / TPS);
+
+function onPlayerDeath(playerId: string) {
+  const socket = playerToSocket.get(playerId);
+  if (!socket) throw new Error(`No socket for player ${playerId}`);
+
+  socket.emit(SOCKET_EVENTS.DEATH);
+  socket.disconnect();
+}
 
 io.listen(4000);
