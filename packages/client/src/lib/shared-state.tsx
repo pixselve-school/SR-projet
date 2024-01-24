@@ -1,3 +1,4 @@
+"use client"
 // SharedStateContext.js
 import { type GameMap, type Player } from '@viper-vortex/shared';
 import { createContext, useContext, useState } from "react";
