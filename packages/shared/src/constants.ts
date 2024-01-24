@@ -59,6 +59,7 @@ export const MIN_SCORE_TO_SPRINT = SCORE_PER_BODY_PART * 4;
  */
 export enum SOCKET_EVENTS {
   CONNECT = "connect",
+  JOIN = "join",
   DISCONNECT = "disconnect",
   MOVE = "move",
   FRAME = "frame",

@@ -12,7 +12,7 @@ const URL =
   process.env.NODE_ENV === "production" ? undefined : "http://localhost:4000";
 const socket = io(URL!, { autoConnect: false });
 
-export function useApi(serverUrl?: string) {
+export function useApi(username: string, serverUrl?: string) {
   const {
     sharedState: { isConnected, me, scene },
     updateSharedState,
@@ -36,6 +36,7 @@ export function useApi(serverUrl?: string) {
 
   useEffect(() => {
     function handleConnect() {
+      socket.emit(SOCKET_EVENTS.JOIN, username);
       updateSharedState({ isConnected: true });
     }
     function handleDisconnect() {
@@ -52,7 +53,7 @@ export function useApi(serverUrl?: string) {
       socket.off("disconnect", handleDisconnect);
       socket.off(SOCKET_EVENTS.FRAME, handleFrame);
     };
-  }, [updateSharedState]);
+  }, [updateSharedState, username]);
 
   return {
     connect: () => {

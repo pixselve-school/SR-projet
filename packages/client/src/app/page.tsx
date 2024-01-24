@@ -8,9 +8,9 @@ import logo from "../assets/logo.png";
 
 export default function HomePage() {
   const [serverUrl, setServerUrl] = useState<string>("http://localhost:4000");
-  const api = useApi(serverUrl);
   const [isCentered, setIsCentered] = useState<boolean>(false);
   const [username, setUsername] = useState("");
+  const api = useApi(username, serverUrl);
 
   return (
     <main className="dustBackground flex h-full flex-col items-center justify-center">

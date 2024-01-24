@@ -30,7 +30,7 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
 
   const player: Player = {
     id: socket.id,
-    name: "Player 1",
+    name: "TEMP USERNAME",
     color: randomDarkColor(),
     body: [{ x: 0, y: 0 }],
     isSprinting: false,
@@ -55,6 +55,10 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
     // we rely on the reference to the player object
     player.isSprinting = move.isSprinting;
     player.desiredAngle = move.angle;
+  });
+
+  socket.on(SOCKET_EVENTS.JOIN, (name) => {
+    player.name = name;
   });
 });
 
