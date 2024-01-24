@@ -10,7 +10,7 @@ export const BASE_SPEED = 2;
 /**
  * The speed at which the player moves when sprinting.
  */
-export const SPRINT_SPEED = 5;
+export const SPRINT_SPEED = 20;
 
 /**
  * The radius of the player's head.

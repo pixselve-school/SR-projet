@@ -1,4 +1,4 @@
-import { type Camera } from "@/app/canvas";
+import { type Camera } from '@/lib/Game';
 import { type Position } from "@viper-vortex/shared";
 
 export function screenToWorld(
