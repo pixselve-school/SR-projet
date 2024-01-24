@@ -22,7 +22,7 @@ export function useApi(serverUrl?: string) {
     if (serverUrl) {
       // @ts-expect-error force the URL to be updated
       socket.io.uri = serverUrl;
-      socket.disconnect().connect();
+      socket.disconnect();
     }
   }, [serverUrl]);
 
