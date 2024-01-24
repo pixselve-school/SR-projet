@@ -3,6 +3,7 @@ import {
   GameMap,
   newGameMap,
   Player,
+  randomDarkColor,
   randomFood,
   SOCKET_EVENTS,
   TPS,
@@ -28,7 +29,7 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   const player: Player = {
     id: socket.id,
     name: "Player 1",
-    color: "#000000",
+    color: randomDarkColor(),
     body: [{ x: 0, y: 0 }],
     isSprinting: false,
     angle: 0,

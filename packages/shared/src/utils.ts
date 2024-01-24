@@ -29,3 +29,8 @@ export function randomFood(number: number = 1) {
   }
   return food;
 }
+
+export function randomDarkColor() {
+  const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  return "#" + randomColor;
+}
