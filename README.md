@@ -32,7 +32,6 @@ packages/
 
 # Improvement 1
 
-- [ ] Send to the client only the relevant informations
 - [x] Player grow in length when collecting dots
 - [x] Add a dash while pressing space bar
 - [x] Dash consume poing (and length)
@@ -44,4 +43,11 @@ packages/
 
 # Improvement 3
 
+- [ ] Add a leaderboard
+- [ ] Send leaderboard on a less frequent basis
+- [ ] Send to the client only the relevant informations
 - [ ] Dynamic player size depending on score
+
+# Improvement 4
+
+- [ ] Client side position interpolation
