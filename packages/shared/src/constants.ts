@@ -1,16 +1,16 @@
 /**
  * The number of ticks per second.
  */
-export const TPS = 60;
+export const TPS = 10;
 
 /**
  * The speed at which the player moves when walking.
  */
-export const BASE_SPEED = 2;
+export const BASE_SPEED = 200 / TPS;
 /**
  * The speed at which the player moves when sprinting.
  */
-export const SPRINT_SPEED = 5;
+export const SPRINT_SPEED = 300 / TPS;
 
 /**
  * The radius of the player's head.
