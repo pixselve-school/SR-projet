@@ -7,7 +7,7 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
   output: "export",
-  basePath: "/SR-projet",
+  basePath: process.env.NODE_ENV === 'production' ? "/SR-projet" : undefined,
   images: {
     unoptimized: true,
   },

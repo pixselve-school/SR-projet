@@ -41,3 +41,7 @@ packages/
 
 - [x] Collision between players to kill them
 - [ ] Death drop dots depending on your current score
+
+# Improvement 3
+
+- [ ] Dynamic player size depending on score
