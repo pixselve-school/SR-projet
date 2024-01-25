@@ -177,12 +177,11 @@ export class Game {
     const screenOrigin = worldToScreen({ x: 0, y: 0 }, this.camera);
     c.lineWidth = 2;
     c.fillStyle = "transparent";
-    c.fillRect(0, 0, screen.width, screen.height);
     c.rect(
       screenOrigin.x,
       screenOrigin.y,
-      this.mapSize.width,
-      this.mapSize.height,
+      this.mapSize.width * this.camera.zoom,
+      this.mapSize.height * this.camera.zoom,
     );
     c.strokeStyle = "black";
     c.stroke();
@@ -202,7 +201,7 @@ export class Game {
     Object.values(this.players).forEach((player) => {
       player.draw();
     });
-    
+
     if (this.me) {
       this.me.draw();
     }

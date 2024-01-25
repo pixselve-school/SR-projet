@@ -1,7 +1,7 @@
 /**
  * The number of ticks per second.
  */
-export const TPS = 10;
+export const TPS = 20;
 
 /**
  * The speed at which the player moves when walking.

@@ -112,7 +112,13 @@ export class Player {
       if (this.orbToDrop >= 1) {
         this.orbToDrop -= 1;
         // drop an orb
-        scene.addOrb(this.tail, 1);
+        scene.addOrb(
+          {
+            x: this.tail.x,
+            y: this.tail.y,
+          },
+          1,
+        );
         this.score -= SCORE_PER_LOST_ORB;
       }
     }
