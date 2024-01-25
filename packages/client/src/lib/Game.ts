@@ -1,10 +1,11 @@
 import { screenToWorld, worldToScreen } from "@/utils/position";
 import { type SceneDTO, type Position } from "@viper-vortex/shared";
 import { type Api } from "@/hooks/useApi";
-import { Orb } from "./Orb";
+import { Food } from "./Food";
 import { Player } from "./Player";
 import { TimeManager } from "./TimeManager";
 import { MyPlayer } from "./MyPlayer";
+import { Orb } from "./Orb";
 
 export type Params = {
   centered: boolean;
@@ -16,11 +17,12 @@ export type Camera = {
     y: number;
   };
   zoom: number;
-}
+};
 
 export class Game {
   private players: Record<string, Player> = {};
-  private orbs: Record<string, Orb> = {};
+  private foods: Record<string, Food> = {};
+  private orbs: Record<string, Food> = {};
   private mapSize = { width: 0, height: 0 };
   private me: MyPlayer | undefined;
   private params: Params = { centered: true };
@@ -52,7 +54,7 @@ export class Game {
 
     const notSeen = new Set(Object.keys(this.players));
     scene.players.forEach((player) => {
-      notSeen.delete(player.id);
+      notSeen.delete(player.id); // seen
       if (this.api?.socket?.id && player.id === this.api?.socket.id) {
         if (!this.me) this.me = new MyPlayer(player, this);
         else this.me.update(player);
@@ -66,16 +68,27 @@ export class Game {
     });
     notSeen.forEach((id) => delete this.players[id]);
 
-    const notSeenFood = new Set(Object.keys(this.orbs));
+    const notSeenFood = new Set(Object.keys(this.foods));
     scene.food.forEach((food) => {
-      notSeenFood.delete(food.id);
-      if (!this.orbs[food.id]) {
-        this.orbs[food.id] = new Orb(food, this);
+      notSeenFood.delete(food.id); // seen
+      if (!this.foods[food.id]) {
+        this.foods[food.id] = new Food(food, this);
       } else {
-        this.orbs[food.id]!.update(food);
+        this.foods[food.id]!.update(food);
       }
     });
-    notSeenFood.forEach((id) => delete this.orbs[id]);
+    notSeenFood.forEach((id) => delete this.foods[id]);
+
+    const notSeenOrbs = new Set(Object.keys(this.orbs));
+    scene.orbs.forEach((orb) => {
+      notSeenOrbs.delete(orb.id); // seen
+      if (!this.orbs[orb.id]) {
+        this.orbs[orb.id] = new Orb(orb, this);
+      } else {
+        this.orbs[orb.id]!.update(orb);
+      }
+    });
+    notSeenOrbs.forEach((id) => delete this.orbs[id]);
   }
 
   setCursor(cursorScreen: Position) {
@@ -168,8 +181,11 @@ export class Game {
 
     if (this.params.centered) this.centerCamera();
 
-    Object.values(this.orbs).forEach((food) => {
+    Object.values(this.foods).forEach((food) => {
       food.draw();
+    });
+    Object.values(this.orbs).forEach((orb) => {
+      orb.draw();
     });
     Object.values(this.players).forEach((player) => {
       player.draw();

@@ -34,11 +34,12 @@ packages/
 
 - [x] Player grow in length when collecting dots
 - [x] Add a dash while pressing space bar
-- [x] Dash consume poing (and length)
+- [x] Dash consume poing (and length) drop orbs
 
 # Improvement 2
 
 - [x] Collision between players to kill them
+- [x] Client side position interpolation
 - [ ] Death drop dots depending on your current score
 
 # Improvement 3
@@ -49,5 +50,3 @@ packages/
 - [ ] Dynamic player size depending on score
 
 # Improvement 4
-
-- [ ] Client side position interpolation

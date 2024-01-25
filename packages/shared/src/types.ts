@@ -26,11 +26,11 @@ export type PlayerDTO = {
  * They are also dropped when a player sprints.
  */
 export type OrbDTO = {
-  id: string;
-  position: Position;
-  // 1 - 10
+  /**
+   * between 1 and 10, this will impact the size of the orb and the amount of points it gives.
+   */
   size: number;
-};
+} & FoodDTO;
 
 export type FoodDTO = {
   id: string;
