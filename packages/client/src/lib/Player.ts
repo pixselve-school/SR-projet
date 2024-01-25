@@ -45,7 +45,7 @@ export class Player extends Entity {
       c.lineTo(prevScreenBodyPart.x, prevScreenBodyPart.y);
     }
 
-    c.lineWidth = 20;
+    c.lineWidth = 30 * this.game.camera.zoom
     c.strokeStyle = this.color;
     c.lineCap = "round";
     c.lineJoin = "round";

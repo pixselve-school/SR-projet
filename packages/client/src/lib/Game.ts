@@ -30,7 +30,8 @@ export class Game {
   private time: TimeManager;
   private isSprinting = false;
   private angle = 0;
-  camera: Camera = { offset: { x: 0, y: 0 }, zoom: 1 };
+  private canvas: HTMLCanvasElement | null = null;
+  camera: Camera = { offset: { x: 0, y: 0 }, zoom: 2 };
   cursor: Position = { x: 0, y: 0 };
   screen = { width: 0, height: 0 };
   c: CanvasRenderingContext2D | undefined;
@@ -46,6 +47,10 @@ export class Game {
 
   destroy() {
     console.log("Game Instance Destroyed");
+  }
+
+  setCanvas(canvas: HTMLCanvasElement | null) {
+    this.canvas = canvas;
   }
 
   setScene(scene: SceneDTO) {
@@ -151,9 +156,19 @@ export class Game {
     if (!playerHead) return;
 
     this.camera.offset = {
-      x: -playerHead.x + this.screen.width / 2,
-      y: -playerHead.y + this.screen.height / 2,
+      x: -playerHead.x * this.camera.zoom + this.screen.width / 2,
+      y: -playerHead.y * this.camera.zoom + this.screen.height / 2,
     };
+
+    // offset the background
+    this.canvas?.style.setProperty(
+      "--background-offset-x",
+      `${this.camera.offset.x}px`,
+    );
+    this.canvas?.style.setProperty(
+      "--background-offset-y",
+      `${this.camera.offset.y}px`,
+    );
   }
 
   private drawBorder() {
@@ -184,16 +199,16 @@ export class Game {
     Object.values(this.foods).forEach((food) => {
       food.draw();
     });
-    Object.values(this.orbs).forEach((orb) => {
-      orb.draw();
-    });
     Object.values(this.players).forEach((player) => {
       player.draw();
     });
-
+    
     if (this.me) {
       this.me.draw();
     }
+    Object.values(this.orbs).forEach((orb) => {
+      orb.draw();
+    });
 
     // show fps top right
     this.c.fillStyle = "white";

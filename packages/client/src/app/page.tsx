@@ -13,7 +13,7 @@ export default function HomePage() {
   const api = useApi();
 
   return (
-    <main className="dustBackground flex h-full flex-col items-center justify-center">
+    <main className="flex h-full flex-col items-center justify-center select-none">
       {!api.isConnected && (
         <LoginComponent
           setServerUrl={setServerUrl}
@@ -57,7 +57,10 @@ function LoginComponent(props: {
   setUsername: (username: string) => void;
 }) {
   return (
-    <div className="flex flex-col items-center gap-8">
+    <form className="flex flex-col items-center gap-8" onSubmit={(e) => {
+      e.preventDefault();
+      props.api.connect(props.serverUrl, props.username);
+    }}>
       <Image className="w-1/2" src={logo} alt="Viper Vortex"></Image>
 
       <h1 className="text-xl font-bold text-red-500">
@@ -82,14 +85,11 @@ function LoginComponent(props: {
       />
 
       <button
-        onClick={()=>{
-          props.api.connect(props.serverUrl, props.username);
-        }}
         disabled={!props.username || !props.serverUrl}
         className="w-full rounded-full bg-red-500 py-2 text-2xl font-bold ring-4 ring-red-500/50 ring-offset-8 ring-offset-red-950 transition-transform hover:scale-105 disabled:bg-gray-500 disabled:ring-gray-500/50"
       >
         Play
       </button>
-    </div>
+    </form>
   );
 }

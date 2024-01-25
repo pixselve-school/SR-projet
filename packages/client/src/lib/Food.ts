@@ -19,7 +19,13 @@ export class Food extends Entity {
     if (!c) return;
     const screenFood = worldToScreen(this.position, this.game.camera);
     c.beginPath();
-    c.arc(screenFood.x, screenFood.y, 10, 0, 2 * Math.PI);
+    c.arc(
+      screenFood.x,
+      screenFood.y,
+      10 * this.game.camera.zoom,
+      0,
+      2 * Math.PI,
+    );
     c.fillStyle = "green";
     c.fill();
   }

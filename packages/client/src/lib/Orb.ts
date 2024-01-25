@@ -20,7 +20,7 @@ export class Orb extends Food {
     if (!c) return;
     const screenFood = worldToScreen(this.position, this.game.camera);
     c.beginPath();
-    c.arc(screenFood.x, screenFood.y, this.size * 5, 0, 2 * Math.PI);
+    c.arc(screenFood.x, screenFood.y, this.size * 5 * this.game.camera.zoom, 0, 2 * Math.PI);
     c.fillStyle = "lightblue";
     c.fill();
   }

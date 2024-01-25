@@ -72,6 +72,7 @@ export function Canvas(params: Params) {
 
   useEffect(() => {
     if (!game) return;
+    game.setCanvas(canvasRef.current);
     const c = canvasRef.current?.getContext('2d');
     if (!c) return;
     game.setContext(c);
@@ -93,5 +94,5 @@ export function Canvas(params: Params) {
     game.setScene(api.scene);
   }, [api.scene, game]);
 
-  return <canvas ref={canvasRef} className='w-full h-full' height={screen.height} width={screen.width} />;
+  return <canvas ref={canvasRef} className='w-full h-full dustBackground' height={screen.height} width={screen.width} />;
 }
