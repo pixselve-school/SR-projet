@@ -1,9 +1,4 @@
-import {
-  OrbDTO,
-  Position,
-  SceneDTO,
-  SCORE_PER_GAINED_ORB,
-} from "@viper-vortex/shared";
+import { Position, SceneDTO, SCORE_PER_GAINED_ORB } from "@viper-vortex/shared";
 import { Player } from "./Player.js";
 import { Chunk } from "./Chunk.js";
 import {
@@ -114,22 +109,6 @@ export class Scene {
    */
   get playerArray(): Player[] {
     return Array.from(this.players.values());
-  }
-
-  get orbsArray(): OrbDTO[] {
-    return Array.from(this.chunks.values()).flatMap((c) =>
-      c.orbs.map((o) => o.dto),
-    );
-  }
-
-  get dto(): SceneDTO {
-    return {
-      width: this.width,
-      height: this.height,
-      players: this.playerArray.map((p) => p.dto),
-      food: [],
-      orbs: this.orbsArray,
-    };
   }
 
   public povDto(player: Player): SceneDTO {

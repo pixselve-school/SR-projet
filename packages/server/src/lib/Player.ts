@@ -1,6 +1,5 @@
 import {
   BASE_SPEED,
-  FOOD_PICKUP_RADIUS,
   MAX_ANGLE,
   MIN_SCORE_TO_SPRINT,
   ORB_SPRINTING_DROP_RATE,
@@ -143,21 +142,6 @@ export class Player {
   public userMove(move: PlayerMoveDTO) {
     this.isSprinting = move.isSprinting;
     this.desiredAngle = move.angle;
-  }
-
-  public isHeadColliding(other: Player): boolean {
-    if (this.id === other.id) {
-      return false;
-    }
-    for (let otherBodyPart of other.body) {
-      if (
-        Math.abs(otherBodyPart.x - this.head.x) < FOOD_PICKUP_RADIUS &&
-        Math.abs(otherBodyPart.y - this.head.y) < FOOD_PICKUP_RADIUS
-      ) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public update(scene: Scene) {
