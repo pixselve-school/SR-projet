@@ -21,3 +21,5 @@ export const FOOD_PER_CHUNK = 10;
 export const FOOD_ORB_SIZE = 2;
 
 export const BODY_PART_PER_ORB = 3;
+
+export const SEND_SCORES_INTERVAL = 1000;

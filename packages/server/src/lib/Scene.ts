@@ -131,4 +131,8 @@ export class Scene {
         .flatMap((c) => c.orbs.map((o) => o.dto)),
     };
   }
+
+  public getTopPlayers(amount: number = 10): Player[] {
+    return this.playerArray.sort((a, b) => b.score - a.score).slice(0, amount);
+  }
 }

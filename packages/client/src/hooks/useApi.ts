@@ -3,13 +3,14 @@ import {
   SOCKET_EVENTS,
   type SceneDTO,
   type PlayerMoveDTO,
+  ScoresDTO,
 } from "@viper-vortex/shared";
 import { useCallback, useEffect } from "react";
 import { io } from "socket.io-client";
 
 export function useApi() {
   const {
-    sharedState: { isConnected, scene, socket },
+    sharedState: { isConnected, scene, socket, scores },
     updateState,
   } = useSharedState();
 
@@ -45,13 +46,20 @@ export function useApi() {
     function handleFrame(scene: SceneDTO) {
       updateState({ scene });
     }
+
+    function handleScores(scores: ScoresDTO) {
+      updateState({ scores });
+    }
+
     socket?.on("connect", handleConnect);
     socket?.on("disconnect", handleDisconnect);
     socket?.on(SOCKET_EVENTS.FRAME, handleFrame);
+    socket?.on(SOCKET_EVENTS.SCORES, handleScores);
     return () => {
       socket?.off("connect", handleConnect);
       socket?.off("disconnect", handleDisconnect);
       socket?.off(SOCKET_EVENTS.FRAME, handleFrame);
+      socket?.off(SOCKET_EVENTS.SCORES, handleScores);
     };
   }, [updateState, socket]);
 
@@ -62,6 +70,7 @@ export function useApi() {
     move,
     scene,
     isConnected,
+    scores,
   };
 }
 

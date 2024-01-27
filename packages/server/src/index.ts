@@ -2,6 +2,7 @@ import { SOCKET_EVENTS, TPS, PlayerMoveDTO } from "@viper-vortex/shared";
 import { Server } from "socket.io";
 import { Player } from "./lib/Player.js";
 import { Scene } from "./lib/Scene.js";
+import { SEND_SCORES_INTERVAL } from "./lib/constants";
 
 const io = new Server({
   cors: {
@@ -39,5 +40,14 @@ setInterval(() => {
     player.socket.emit(SOCKET_EVENTS.FRAME, scene.povDto(player));
   }
 }, 1000 / TPS);
+
+setInterval(() => {
+  io.emit(
+    SOCKET_EVENTS.SCORES,
+    scene
+      .getTopPlayers()
+      .map((player) => ({ name: player.name, score: player.score })),
+  );
+}, SEND_SCORES_INTERVAL);
 
 io.listen(4000);

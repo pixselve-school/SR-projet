@@ -56,3 +56,8 @@ export type PlayerMoveDTO = {
   angle: number;
   isSprinting: boolean;
 };
+
+export type ScoresDTO = {
+  name: string;
+  score: number;
+}[];

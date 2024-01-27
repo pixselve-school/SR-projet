@@ -69,4 +69,5 @@ export enum SOCKET_EVENTS {
   MOVE = "move",
   FRAME = "frame",
   DEATH = "death",
+  SCORES = "scores",
 }
