@@ -1,6 +1,5 @@
 import {
   BASE_SPEED,
-  FOOD_PICKUP_RADIUS,
   MAX_ANGLE,
   MIN_SCORE_TO_SPRINT,
   ORB_SPRINTING_DROP_RATE,
@@ -15,6 +14,9 @@ import {
 } from "@viper-vortex/shared";
 import { Socket } from "socket.io";
 import { Scene } from "./Scene.js";
+import { Chunk } from "./Chunk.js";
+import { CHUNK_SIZE, RENDER_DISTANCE } from "./constants.js";
+import { Orb } from "./Orb";
 
 export class Player {
   private isSprinting: boolean = false;
@@ -25,8 +27,11 @@ export class Player {
   // 0 - 1: will vary based on `ORB_SPRINTING_DROP_RATE`
   private orbToDrop: number = 0;
   public score: number = 0;
-  private body: Position[] = [];
-  private color: string;
+  public body: Position[] = [];
+  private readonly color: string;
+
+  public headChunk: Chunk | undefined;
+  public tailChunk: Chunk | undefined;
 
   constructor(
     public readonly socket: Socket,
@@ -81,6 +86,54 @@ export class Player {
     return this.canSprint && this.isSprinting ? SPRINT_SPEED : BASE_SPEED;
   }
 
+  public chunksInView(chunks: Map<string, Chunk>): Chunk[] {
+    const headChunk = this.headChunk;
+    if (!headChunk) {
+      return [];
+    }
+    const chunksInView: Chunk[] = [];
+    const renderDistance = RENDER_DISTANCE;
+    for (let x = -renderDistance; x <= renderDistance; x++) {
+      for (let y = -renderDistance; y <= renderDistance; y++) {
+        const chunk = chunks.get(
+          `${headChunk.topX / CHUNK_SIZE + x},${headChunk.topY / CHUNK_SIZE + y}`,
+        );
+        if (chunk) {
+          chunksInView.push(chunk);
+        }
+      }
+    }
+    return chunksInView;
+  }
+
+  public updateHeadTailChunks(chunks: Map<string, Chunk>) {
+    if (!this.headChunk || !this.tailChunk) {
+      this.headChunk = chunks.get(Chunk.getChunkKey(this.head));
+      this.tailChunk = chunks.get(Chunk.getChunkKey(this.tail));
+      return;
+    }
+    if (!this.headChunk.isPointInChunk(this.head)) {
+      // Update the player's chunk
+      this.headChunk = chunks.get(Chunk.getChunkKey(this.head));
+    }
+    if (!this.tailChunk.isPointInChunk(this.tail)) {
+      // Update the player's chunk
+      this.tailChunk = chunks.get(Chunk.getChunkKey(this.tail));
+    }
+  }
+
+  public isColliding(position: Position, radius: number): boolean {
+    for (let bodyPart of this.body) {
+      if (
+        Math.abs(bodyPart.x - position.x) < radius &&
+        Math.abs(bodyPart.y - position.y) < radius
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public emitDeathAndDisconnectSocket() {
     this.socket.emit(SOCKET_EVENTS.DEATH);
     this.socket.disconnect();
@@ -91,34 +144,23 @@ export class Player {
     this.desiredAngle = move.angle;
   }
 
-  public isHeadColliding(other: Player): boolean {
-    if (this.id === other.id) {
-      return false;
-    }
-    for (let otherBodyPart of other.body) {
-      if (
-        Math.abs(otherBodyPart.x - this.head.x) < FOOD_PICKUP_RADIUS &&
-        Math.abs(otherBodyPart.y - this.head.y) < FOOD_PICKUP_RADIUS
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public update(scene: Scene) {
     if (this.isSprinting && this.canSprint) {
       this.orbToDrop += ORB_SPRINTING_DROP_RATE;
       if (this.orbToDrop >= 1) {
         this.orbToDrop -= 1;
         // drop an orb
-        scene.addOrb(
-          {
-            x: this.tail.x,
-            y: this.tail.y,
-          },
-          1,
+        this.tailChunk?.addOrb(
+          new Orb(
+            {
+              x: this.tail.x,
+              y: this.tail.y,
+            },
+            1,
+            this.color,
+          ),
         );
+
         this.score -= SCORE_PER_LOST_ORB;
       }
     }

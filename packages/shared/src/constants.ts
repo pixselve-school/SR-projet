@@ -20,7 +20,7 @@ export const FOOD_PICKUP_RADIUS = 20;
 /**
  * The maximum angle the player can turn in one tick.
  */
-export const MAX_ANGLE = Math.PI / 120 / TPS
+export const MAX_ANGLE = Math.PI / (TPS / 5);
 
 /**
  * The rate at which a player will drop an orb when sprinting.
@@ -69,4 +69,5 @@ export enum SOCKET_EVENTS {
   MOVE = "move",
   FRAME = "frame",
   DEATH = "death",
+  SCORES = "scores",
 }

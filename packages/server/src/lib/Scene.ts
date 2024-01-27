@@ -1,44 +1,37 @@
-import {
-  FIELD_OF_VIEW_RADIUS,
-  FOOD_PICKUP_RADIUS,
-  FoodDTO,
-  MAP_HEIGHT,
-  MAP_WIDTH,
-  OrbDTO,
-  Position,
-  SceneDTO,
-  SCORE_PER_FOOD,
-  SCORE_PER_GAINED_ORB,
-} from "@viper-vortex/shared";
+import { Position, SceneDTO, SCORE_PER_GAINED_ORB } from "@viper-vortex/shared";
 import { Player } from "./Player.js";
-import { v4 as uuidv4 } from "uuid";
+import { Chunk } from "./Chunk.js";
+import {
+  BODY_PART_PER_ORB,
+  CHUNK_SIZE,
+  MAP_CHUNKS_WIDTH,
+} from "./constants.js";
+import { Orb } from "./Orb.js";
 
 export class Scene {
   public readonly width: number;
   public readonly height: number;
   private players: Map<string, Player> = new Map();
-  private food: FoodDTO[] = [];
-  private orbs: OrbDTO[] = [];
+  private chunks: Map<string, Chunk> = new Map();
 
   constructor() {
-    this.width = MAP_WIDTH;
-    this.height = MAP_HEIGHT;
+    this.width = MAP_CHUNKS_WIDTH * CHUNK_SIZE;
+    this.height = MAP_CHUNKS_WIDTH * CHUNK_SIZE;
+
+    // Generate all the chunks
+    for (let x = 0; x < MAP_CHUNKS_WIDTH; x++) {
+      for (let y = 0; y < MAP_CHUNKS_WIDTH; y++) {
+        this.chunks.set(`${x},${y}`, new Chunk(x * CHUNK_SIZE, y * CHUNK_SIZE));
+      }
+    }
   }
 
   /**
-   * Adds random food to the scene
-   * @param number number of food to add
+   * Returns the chunk that the position is in
+   * @param position position to check
    */
-  public addRandomFood(number: number = 1) {
-    for (let i = 0; i < number; i++) {
-      this.food.push({
-        id: uuidv4(),
-        position: {
-          x: Math.floor(Math.random() * this.width),
-          y: Math.floor(Math.random() * this.height),
-        },
-      });
-    }
+  public getChunk(position: Position): Chunk | undefined {
+    return this.chunks.get(Chunk.getChunkKey(position));
   }
 
   /**
@@ -54,62 +47,61 @@ export class Scene {
    * @param id player id
    */
   public removePlayer(id: string) {
+    this.removePlayerInChunks(this.players.get(id)!);
     this.players.delete(id);
-  }
-
-  public addOrb(position: Position, size: number) {
-    this.orbs.push({
-      id: uuidv4(),
-      position,
-      size,
-    });
   }
 
   public update() {
     for (let player of this.playerArray) {
+      const headChunk = player.headChunk;
+      const tailChunk = player.tailChunk;
+
       player.update(this);
+      player.updateHeadTailChunks(this.chunks);
 
-      // check for collisions with food. Radius of 10
-      for (let i = 0; i < this.food.length; i++) {
-        const food = this.food[i];
-        if (
-          Math.abs(food.position.x - player.head.x) < FOOD_PICKUP_RADIUS &&
-          Math.abs(food.position.y - player.head.y) < FOOD_PICKUP_RADIUS
-        ) {
-          // collision
-          // remove the food
-          this.food.splice(i, 1);
-          // add score
-          player.score += SCORE_PER_FOOD;
-        }
+      if (headChunk !== player.headChunk) {
+        player.headChunk!.addPlayer(player);
       }
 
-      // check for collisions with other players
-      for (let otherPlayer of this.playerArray) {
-        // Skip if it's the same player
-        if (player.id === otherPlayer.id) continue;
-
-        if (player.isHeadColliding(otherPlayer)) {
-          // TODO: Handle player death
-          player.emitDeathAndDisconnectSocket();
-        }
+      if (tailChunk && tailChunk !== player.tailChunk) {
+        tailChunk!.removePlayer(player);
       }
 
-      // Check for collisions with orbs
-      for (let i = 0; i < this.orbs.length; i++) {
-        const orb = this.orbs[i];
-        if (
-          Math.abs(orb.position.x - player.head.x) < FOOD_PICKUP_RADIUS &&
-          Math.abs(orb.position.y - player.head.y) < FOOD_PICKUP_RADIUS
-        ) {
-          // collision
-          // remove the orb
-          this.orbs.splice(i, 1);
-          // add score
-          player.score += SCORE_PER_GAINED_ORB;
+      // Check if the player has picked up any orbs
+      const orbs = player.headChunk!.getCollidingOrbsWithPlayer(player);
+      for (let orb of orbs) {
+        player.headChunk!.removeOrb(orb);
+        player.score += SCORE_PER_GAINED_ORB + orb.size;
+      }
+
+      // Check if the player has collided with any other players
+      const players = player.headChunk!.getCollidingPlayersWithPlayer(player);
+      if (players.length > 0) {
+        // drop one orb per 3 body parts
+
+        for (let i = 0; i < player.body.length; i += BODY_PART_PER_ORB) {
+          const chunk = this.getChunk(player.body[i]);
+          if (chunk) {
+            chunk.addOrb(
+              new Orb(
+                {
+                  x: player.body[i].x,
+                  y: player.body[i].y,
+                },
+                BODY_PART_PER_ORB,
+              ),
+            );
+          }
         }
+        player.emitDeathAndDisconnectSocket();
       }
     }
+  }
+
+  private removePlayerInChunks(player: Player) {
+    this.chunks.forEach((chunk) => {
+      chunk.removePlayer(player);
+    });
   }
 
   /**
@@ -119,42 +111,28 @@ export class Scene {
     return Array.from(this.players.values());
   }
 
-  get dto(): SceneDTO {
+  public povDto(player: Player): SceneDTO {
+    const uniquePlayers = new Set<Player>();
+    uniquePlayers.add(player);
+    player.chunksInView(this.chunks).forEach((c) => {
+      c.playerArray.forEach((p) => uniquePlayers.add(p));
+    });
+
     return {
       width: this.width,
       height: this.height,
-      players: this.playerArray.map((p) => p.dto),
-      food: this.food,
-      orbs: this.orbs,
+      players:
+        uniquePlayers.size > 0
+          ? Array.from(uniquePlayers).map((p) => p.dto)
+          : [],
+      food: [],
+      orbs: player
+        .chunksInView(this.chunks)
+        .flatMap((c) => c.orbs.map((o) => o.dto)),
     };
   }
 
-  public povDto(player: Player): SceneDTO {
-    // Only send what the player can see in a radius of 100
-    const povPlayers = this.playerArray.filter((p) => {
-      return (
-        Math.abs(p.head.x - player.head.x) < FIELD_OF_VIEW_RADIUS &&
-        Math.abs(p.head.y - player.head.y) < FIELD_OF_VIEW_RADIUS
-      );
-    });
-    const povFood = this.food.filter((f) => {
-      return (
-        Math.abs(f.position.x - player.head.x) < FIELD_OF_VIEW_RADIUS &&
-        Math.abs(f.position.y - player.head.y) < FIELD_OF_VIEW_RADIUS
-      );
-    });
-    const povOrbs = this.orbs.filter((o) => {
-      return (
-        Math.abs(o.position.x - player.head.x) < FIELD_OF_VIEW_RADIUS &&
-        Math.abs(o.position.y - player.head.y) < FIELD_OF_VIEW_RADIUS
-      );
-    });
-    return {
-      width: this.width,
-      height: this.height,
-      players: povPlayers.map((p) => p.dto),
-      food: povFood,
-      orbs: povOrbs,
-    };
+  public getTopPlayers(amount: number = 10): Player[] {
+    return this.playerArray.sort((a, b) => b.score - a.score).slice(0, amount);
   }
 }

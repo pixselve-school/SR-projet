@@ -4,7 +4,7 @@ import { useApi } from "@/hooks/useApi";
 import Image from "next/image";
 import { useState } from "react";
 import logo from "../assets/logo.png";
-import { Canvas } from './canvas';
+import { Canvas } from "./canvas";
 
 export default function HomePage() {
   const [serverUrl, setServerUrl] = useState<string>("http://localhost:4000");
@@ -13,7 +13,7 @@ export default function HomePage() {
   const api = useApi();
 
   return (
-    <main className="flex h-full flex-col items-center justify-center select-none">
+    <main className="flex h-full select-none flex-col items-center justify-center">
       {!api.isConnected && (
         <LoginComponent
           setServerUrl={setServerUrl}
@@ -37,8 +37,8 @@ export default function HomePage() {
       <div className="absolute right-0 bg-gray-400 p-4">
         <div className="font-bold">Score</div>
         <ul>
-          {api.scene?.players.map((player) => (
-            <li key={player.id}>
+          {api.scores?.map((player) => (
+            <li key={player.name + player.score}>
               {player.name}: {player.score}
             </li>
           ))}
@@ -57,10 +57,13 @@ function LoginComponent(props: {
   setUsername: (username: string) => void;
 }) {
   return (
-    <form className="flex flex-col items-center gap-8" onSubmit={(e) => {
-      e.preventDefault();
-      props.api.connect(props.serverUrl, props.username);
-    }}>
+    <form
+      className="flex flex-col items-center gap-8"
+      onSubmit={(e) => {
+        e.preventDefault();
+        props.api.connect(props.serverUrl, props.username);
+      }}
+    >
       <Image className="w-1/2" src={logo} alt="Viper Vortex"></Image>
 
       <h1 className="text-xl font-bold text-red-500">

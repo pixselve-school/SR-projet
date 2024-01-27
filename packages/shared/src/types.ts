@@ -5,6 +5,9 @@ export type SceneDTO = {
   width: number;
   height: number;
   players: PlayerDTO[];
+  /**
+   * @deprecated use orbs instead
+   */
   food: FoodDTO[];
   orbs: OrbDTO[];
 };
@@ -30,6 +33,7 @@ export type OrbDTO = {
    * between 1 and 10, this will impact the size of the orb and the amount of points it gives.
    */
   size: number;
+  color: string;
 } & FoodDTO;
 
 export type FoodDTO = {
@@ -52,3 +56,8 @@ export type PlayerMoveDTO = {
   angle: number;
   isSprinting: boolean;
 };
+
+export type ScoresDTO = {
+  name: string;
+  score: number;
+}[];

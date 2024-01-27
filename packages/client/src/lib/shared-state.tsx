@@ -1,18 +1,19 @@
-"use client"
+"use client";
 
-import { type SceneDTO } from '@viper-vortex/shared';
+import { type SceneDTO, ScoresDTO } from "@viper-vortex/shared";
 import { createContext, useContext, useState } from "react";
-import { type Socket } from 'socket.io-client';
+import { type Socket } from "socket.io-client";
 
 type SharedState = {
   scene?: SceneDTO;
   isConnected?: boolean;
   socket?: Socket;
-}
+  scores?: ScoresDTO;
+};
 type Context = {
-  sharedState: SharedState,
-  updateState: (newState: Partial<SharedState>) => void
-}
+  sharedState: SharedState;
+  updateState: (newState: Partial<SharedState>) => void;
+};
 
 const SharedStateContext = createContext<Context>({} as Context);
 
@@ -20,11 +21,16 @@ export function useSharedState() {
   return useContext(SharedStateContext);
 }
 
-export function SharedStateProvider({ children }: { children?: React.ReactNode }) {
+export function SharedStateProvider({
+  children,
+}: {
+  children?: React.ReactNode;
+}) {
   const [sharedState, setSharedState] = useState<SharedState>({
     scene: undefined,
     isConnected: false,
     socket: undefined,
+    scores: undefined,
   });
 
   const updateSharedState = (newState: Partial<SharedState>) => {
@@ -32,7 +38,9 @@ export function SharedStateProvider({ children }: { children?: React.ReactNode }
   };
 
   return (
-    <SharedStateContext.Provider value={{ sharedState, updateState: updateSharedState }}>
+    <SharedStateContext.Provider
+      value={{ sharedState, updateState: updateSharedState }}
+    >
       {children}
     </SharedStateContext.Provider>
   );
