@@ -15,6 +15,8 @@ import {
 } from "@viper-vortex/shared";
 import { Socket } from "socket.io";
 import { Scene } from "./Scene.js";
+import { Chunk } from "./Chunk.js";
+import { CHUNK_SIZE, RENDER_DISTANCE } from "./constants.js";
 
 export class Player {
   private isSprinting: boolean = false;
@@ -26,7 +28,9 @@ export class Player {
   private orbToDrop: number = 0;
   public score: number = 0;
   private body: Position[] = [];
-  private color: string;
+  private readonly color: string;
+
+  public chunk: Chunk | undefined;
 
   constructor(
     public readonly socket: Socket,
@@ -79,6 +83,26 @@ export class Player {
 
   get speed(): number {
     return this.canSprint && this.isSprinting ? SPRINT_SPEED : BASE_SPEED;
+  }
+
+  public chunksInView(chunks: Map<string, Chunk>): Chunk[] {
+    const headChunk = this.chunk;
+    if (!headChunk) {
+      return [];
+    }
+    const chunksInView: Chunk[] = [];
+    const renderDistance = RENDER_DISTANCE;
+    for (let x = -renderDistance; x <= renderDistance; x++) {
+      for (let y = -renderDistance; y <= renderDistance; y++) {
+        const chunk = chunks.get(
+          `${headChunk.topX / CHUNK_SIZE + x},${headChunk.topY / CHUNK_SIZE + y}`,
+        );
+        if (chunk) {
+          chunksInView.push(chunk);
+        }
+      }
+    }
+    return chunksInView;
   }
 
   public emitDeathAndDisconnectSocket() {
