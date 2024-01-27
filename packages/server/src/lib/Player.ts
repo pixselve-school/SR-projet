@@ -17,6 +17,7 @@ import { Socket } from "socket.io";
 import { Scene } from "./Scene.js";
 import { Chunk } from "./Chunk.js";
 import { CHUNK_SIZE, RENDER_DISTANCE } from "./constants.js";
+import { Orb } from "./Orb";
 
 export class Player {
   private isSprinting: boolean = false;
@@ -27,10 +28,11 @@ export class Player {
   // 0 - 1: will vary based on `ORB_SPRINTING_DROP_RATE`
   private orbToDrop: number = 0;
   public score: number = 0;
-  private body: Position[] = [];
+  public body: Position[] = [];
   private readonly color: string;
 
-  public chunk: Chunk | undefined;
+  public headChunk: Chunk | undefined;
+  public tailChunk: Chunk | undefined;
 
   constructor(
     public readonly socket: Socket,
@@ -86,7 +88,7 @@ export class Player {
   }
 
   public chunksInView(chunks: Map<string, Chunk>): Chunk[] {
-    const headChunk = this.chunk;
+    const headChunk = this.headChunk;
     if (!headChunk) {
       return [];
     }
@@ -103,6 +105,34 @@ export class Player {
       }
     }
     return chunksInView;
+  }
+
+  public updateHeadTailChunks(chunks: Map<string, Chunk>) {
+    if (!this.headChunk || !this.tailChunk) {
+      this.headChunk = chunks.get(Chunk.getChunkKey(this.head));
+      this.tailChunk = chunks.get(Chunk.getChunkKey(this.tail));
+      return;
+    }
+    if (!this.headChunk.isPointInChunk(this.head)) {
+      // Update the player's chunk
+      this.headChunk = chunks.get(Chunk.getChunkKey(this.head));
+    }
+    if (!this.tailChunk.isPointInChunk(this.tail)) {
+      // Update the player's chunk
+      this.tailChunk = chunks.get(Chunk.getChunkKey(this.tail));
+    }
+  }
+
+  public isColliding(position: Position, radius: number): boolean {
+    for (let bodyPart of this.body) {
+      if (
+        Math.abs(bodyPart.x - position.x) < radius &&
+        Math.abs(bodyPart.y - position.y) < radius
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public emitDeathAndDisconnectSocket() {
@@ -136,13 +166,17 @@ export class Player {
       if (this.orbToDrop >= 1) {
         this.orbToDrop -= 1;
         // drop an orb
-        scene.addOrb(
-          {
-            x: this.tail.x,
-            y: this.tail.y,
-          },
-          1,
+        this.tailChunk?.addOrb(
+          new Orb(
+            {
+              x: this.tail.x,
+              y: this.tail.y,
+            },
+            1,
+            this.color,
+          ),
         );
+
         this.score -= SCORE_PER_LOST_ORB;
       }
     }

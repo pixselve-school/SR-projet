@@ -8,9 +8,21 @@ export class Chunk {
     public topX: number,
     public topY: number,
     public orbs: Orb[] = [],
-    public players: Map<string, Player> = new Map(),
+    private players: Map<string, Player> = new Map(),
   ) {
     this.orbs = this.generateOrbs();
+  }
+
+  public removePlayer(player: Player) {
+    this.players.delete(player.id);
+  }
+
+  public addPlayer(player: Player) {
+    this.players.set(player.id, player);
+  }
+
+  public get playerArray(): Player[] {
+    return Array.from(this.players.values());
   }
 
   public toString(): string {
@@ -29,9 +41,24 @@ export class Chunk {
     this.orbs = this.orbs.filter((o) => o.id !== orb.id);
   }
 
+  public addOrb(orb: Orb) {
+    // check if orb is in chunk
+    if (!this.isPointInChunk(orb.position)) {
+      throw new Error("Orb is not in chunk");
+    }
+    this.orbs.push(orb);
+  }
+
   public getCollidingOrbsWithPlayer(player: Player): Orb[] {
     return this.orbs.filter((orb) =>
       orb.isColliding(player.head, FOOD_PICKUP_RADIUS),
+    );
+  }
+
+  public getCollidingPlayersWithPlayer(player: Player): Player[] {
+    return this.playerArray.filter(
+      (p) =>
+        p.id !== player.id && p.isColliding(player.head, FOOD_PICKUP_RADIUS),
     );
   }
 
@@ -55,5 +82,13 @@ export class Chunk {
       position.y >= this.topY &&
       position.y <= this.bottomY
     );
+  }
+
+  /**
+   * Returns the chunk key for a given position.
+   * @param position position
+   */
+  public static getChunkKey(position: Position): string {
+    return `${Math.floor(position.x / CHUNK_SIZE)},${Math.floor(position.y / CHUNK_SIZE)}`;
   }
 }

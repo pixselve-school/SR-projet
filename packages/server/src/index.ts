@@ -32,11 +32,6 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   });
 });
 
-// interval to refill the food
-setInterval(() => {
-  scene.addRandomFood(100);
-}, 1000);
-
 setInterval(() => {
   scene.update();
 

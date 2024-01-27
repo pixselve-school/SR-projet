@@ -1,4 +1,4 @@
-import { OrbDTO, Position } from "@viper-vortex/shared";
+import { OrbDTO, Position, randomDarkColor } from "@viper-vortex/shared";
 import { v4 as uuidv4 } from "uuid";
 
 export class Orb {
@@ -6,6 +6,7 @@ export class Orb {
   constructor(
     public position: Position,
     public size: number,
+    public color: string = randomDarkColor(),
   ) {
     this.id = uuidv4();
   }
@@ -15,6 +16,7 @@ export class Orb {
       id: this.id,
       position: this.position,
       size: this.size,
+      color: this.color,
     };
   }
 

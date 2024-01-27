@@ -1,7 +1,7 @@
 /**
  * The distance in chunks that the server will render.
  */
-export const RENDER_DISTANCE = 1;
+export const RENDER_DISTANCE = 2;
 
 /**
  * The size of a chunk.
@@ -18,4 +18,6 @@ export const MAP_CHUNKS_WIDTH = 10;
  */
 export const FOOD_PER_CHUNK = 10;
 
-export const FOOD_ORB_SIZE = 3;
+export const FOOD_ORB_SIZE = 2;
+
+export const BODY_PART_PER_ORB = 3;
