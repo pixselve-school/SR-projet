@@ -36,11 +36,12 @@ export class Player {
   constructor(
     public readonly socket: Socket,
     public name: string,
+    public readonly position: Position,
   ) {
     this.color = randomDarkColor();
     this.body.push({
-      x: 0,
-      y: 0,
+      x: position.x,
+      y: position.y,
     });
   }
 

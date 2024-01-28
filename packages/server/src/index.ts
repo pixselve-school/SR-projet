@@ -16,7 +16,8 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   console.log(`New connection: ${socket.id}`);
 
   socket.on(SOCKET_EVENTS.JOIN, (name) => {
-    const player = new Player(socket, name);
+    console.log(`Player ${socket.id} joined as ${name}`);
+    const player = new Player(socket, name, scene.randomPosition());
     scene.addPlayer(player);
   });
 
