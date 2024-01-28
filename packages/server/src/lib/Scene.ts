@@ -51,6 +51,9 @@ export class Scene {
     this.players.delete(id);
   }
 
+  /**
+   * Updates the scene
+   */
   public update() {
     for (let player of this.playerArray) {
       const headChunk = player.headChunk;
@@ -111,6 +114,10 @@ export class Scene {
     return Array.from(this.players.values());
   }
 
+  /**
+    * Returns the scene data for a player
+    * @param player player to get the data for
+    */
   public povDto(player: Player): SceneDTO {
     const uniquePlayers = new Set<Player>();
     uniquePlayers.add(player);
@@ -132,6 +139,10 @@ export class Scene {
     };
   }
 
+  /**
+    * Returns the top players
+    * @param amount amount of players to return
+    */
   public getTopPlayers(amount: number = 10): Player[] {
     return this.playerArray.sort((a, b) => b.score - a.score).slice(0, amount);
   }
