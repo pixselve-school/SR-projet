@@ -15,12 +15,9 @@ const scene = new Scene();
 io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   console.log(`New connection: ${socket.id}`);
 
-  const player = new Player(socket, "Anonymous");
-
-  scene.addPlayer(player);
-
   socket.on(SOCKET_EVENTS.JOIN, (name) => {
-    player.name = name;
+    const player = new Player(socket, name);
+    scene.addPlayer(player);
   });
 
   socket.on(SOCKET_EVENTS.DISCONNECT, () => {
@@ -29,6 +26,12 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
   });
 
   socket.on(SOCKET_EVENTS.MOVE, (move: PlayerMoveDTO) => {
+    const player = scene.getPlayer(socket.id);
+    if (!player) {
+      console.error(`Player ${socket.id} tried to move before joining`);
+      socket.disconnect();
+      return;
+    }
     player.userMove(move);
   });
 });

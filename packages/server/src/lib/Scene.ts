@@ -43,11 +43,21 @@ export class Scene {
   }
 
   /**
+   * Returns a player from the scene
+   * @param id player id
+   */
+  public getPlayer(id: string) {
+    return this.players.get(id);
+  }
+
+  /**
    * Removes a player from the scene
    * @param id player id
    */
   public removePlayer(id: string) {
-    this.removePlayerInChunks(this.players.get(id)!);
+    const player = this.players.get(id);
+    if (!player) return;
+    this.removePlayerInChunks(player);
     this.players.delete(id);
   }
 
