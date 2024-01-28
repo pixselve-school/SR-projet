@@ -9,8 +9,18 @@ export class Chunk {
     public topY: number,
     public orbs: Orb[] = [],
     private players: Map<string, Player> = new Map(),
-  ) {
+    public loaded = false,
+  ) {}
+
+  public load() {
+    this.loaded = true;
     this.orbs = this.generateOrbs();
+    this.players = new Map();
+  }
+
+  public unload() {
+    this.loaded = false;
+    this.orbs = [];
   }
 
   public removePlayer(player: Player) {

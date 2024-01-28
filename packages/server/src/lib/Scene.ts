@@ -99,6 +99,20 @@ export class Scene {
         player.emitDeathAndDisconnectSocket();
       }
     }
+
+    // Unload / load chunks
+    const allChunksInView = new Set<Chunk>();
+    for (let player of this.playerArray) {
+      const chunksInView = player.chunksInView(this.chunks);
+      chunksInView.forEach((c) => allChunksInView.add(c));
+    }
+    this.chunks.forEach((chunk) => {
+      if (!allChunksInView.has(chunk)) {
+        if (chunk.loaded) chunk.unload();
+      } else {
+        if (!chunk.loaded) chunk.load();
+      }
+    });
   }
 
   private removePlayerInChunks(player: Player) {
@@ -115,9 +129,9 @@ export class Scene {
   }
 
   /**
-    * Returns the scene data for a player
-    * @param player player to get the data for
-    */
+   * Returns the scene data for a player
+   * @param player player to get the data for
+   */
   public povDto(player: Player): SceneDTO {
     const uniquePlayers = new Set<Player>();
     uniquePlayers.add(player);
@@ -140,9 +154,9 @@ export class Scene {
   }
 
   /**
-    * Returns the top players
-    * @param amount amount of players to return
-    */
+   * Returns the top players
+   * @param amount amount of players to return
+   */
   public getTopPlayers(amount: number = 10): Player[] {
     return this.playerArray.sort((a, b) => b.score - a.score).slice(0, amount);
   }
