@@ -3,7 +3,8 @@
   "workspaces": [
     "packages/client",
     "packages/server",
-    "packages/shared"
+    "packages/shared",
+    "packages/end-to-end-tests"
   ],
   "scripts": {
     "dev": "concurrently -n \"░ client,█ server,▒ shared\" \"npm:dev --workspace=packages/client\" \"npm:dev --workspace=packages/server\" \"npm:watch --workspace=packages/shared\"",

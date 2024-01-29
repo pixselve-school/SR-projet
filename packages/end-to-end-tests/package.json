@@ -1,0 +1,14 @@
+{
+  "name": "@viper-vortex/end-to-end-tests",
+  "type": "module",
+  "scripts": {
+    "test": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.7.4"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.3",
+    "tsx": "^4.7.0"
+  }
+}
