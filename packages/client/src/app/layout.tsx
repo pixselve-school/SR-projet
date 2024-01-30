@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <SharedStateProvider>
       <html lang="en" className='h-full'>
-        <body className={`h-full bg-red-50 font-sans ${inter.variable}`}>{children}</body>
+        <body className={`h-full font-sans ${inter.variable}`}>{children}</body>
       </html>
     </SharedStateProvider>
   );

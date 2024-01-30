@@ -73,7 +73,7 @@ export class Player extends Entity {
     c.font = "20px Arial";
     c.fillStyle = "white";
     c.textAlign = "center";
-    c.fillText(this.name + this.body.length, screenHead.x, screenHead.y - 20);
+    c.fillText(this.name, screenHead.x, screenHead.y - 20);
   }
 
   interpolate() {
