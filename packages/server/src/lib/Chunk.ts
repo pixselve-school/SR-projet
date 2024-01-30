@@ -1,4 +1,4 @@
-import { CHUNK_SIZE, FOOD_POINTS, FOOD_PER_CHUNK } from "./constants";
+import { CHUNK_SIZE, FOOD_POINTS, FOOD_PER_CHUNK } from "./constants.js";
 import { Orb } from "./Orb.js";
 import { PICKUP_RADIUS, Position } from "@viper-vortex/shared";
 import { Player } from "./Player.js";
@@ -67,8 +67,7 @@ export class Chunk {
 
   public getCollidingPlayersWithPlayer(player: Player): Player[] {
     return this.playerArray.filter(
-      (p) =>
-        p.id !== player.id && p.isColliding(player.head, PICKUP_RADIUS),
+      (p) => p.id !== player.id && p.isColliding(player.head, PICKUP_RADIUS),
     );
   }
 

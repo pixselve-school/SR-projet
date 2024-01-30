@@ -2,7 +2,7 @@ import { SOCKET_EVENTS, TPS, PlayerMoveDTO } from "@viper-vortex/shared";
 import { Server } from "socket.io";
 import { Player } from "./lib/Player.js";
 import { Scene } from "./lib/Scene.js";
-import { SEND_SCORES_INTERVAL } from "./lib/constants";
+import { SEND_SCORES_INTERVAL } from "./lib/constants.js";
 
 const io = new Server({
   cors: {
