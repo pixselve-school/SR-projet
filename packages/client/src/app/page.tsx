@@ -12,6 +12,12 @@ export default function HomePage() {
   const [username, setUsername] = useState("");
   const api = useApi();
 
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") {
+      setServerUrl("sr.mael.app");
+    }
+  },[])
+
 
   useEffect(() => {
     setUsername(getRandomUsername())
