@@ -1,6 +1,6 @@
-import { CHUNK_SIZE, FOOD_ORB_SIZE, FOOD_PER_CHUNK } from "./constants";
+import { CHUNK_SIZE, FOOD_POINTS, FOOD_PER_CHUNK } from "./constants";
 import { Orb } from "./Orb.js";
-import { FOOD_PICKUP_RADIUS, Position } from "@viper-vortex/shared";
+import { PICKUP_RADIUS, Position } from "@viper-vortex/shared";
 import { Player } from "./Player.js";
 
 export class Chunk {
@@ -61,21 +61,21 @@ export class Chunk {
 
   public getCollidingOrbsWithPlayer(player: Player): Orb[] {
     return this.orbs.filter((orb) =>
-      orb.isColliding(player.head, FOOD_PICKUP_RADIUS),
+      orb.isColliding(player.head, PICKUP_RADIUS),
     );
   }
 
   public getCollidingPlayersWithPlayer(player: Player): Player[] {
     return this.playerArray.filter(
       (p) =>
-        p.id !== player.id && p.isColliding(player.head, FOOD_PICKUP_RADIUS),
+        p.id !== player.id && p.isColliding(player.head, PICKUP_RADIUS),
     );
   }
 
   private generateOrbs(): Orb[] {
     return new Array(FOOD_PER_CHUNK)
       .fill(0)
-      .map(() => new Orb(this.randomPositionInChunk(), FOOD_ORB_SIZE));
+      .map(() => new Orb(this.randomPositionInChunk(), FOOD_POINTS));
   }
 
   private randomPositionInChunk(): Position {

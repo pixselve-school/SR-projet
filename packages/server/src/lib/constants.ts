@@ -16,10 +16,12 @@ export const MAP_CHUNKS_WIDTH = 10;
 /**
  * Food per chunk.
  */
-export const FOOD_PER_CHUNK = 10;
+export const FOOD_PER_CHUNK = 100;
 
-export const FOOD_ORB_SIZE = 2;
+export const FOOD_POINTS = 2;
 
 export const BODY_PART_PER_ORB = 3;
 
 export const SEND_SCORES_INTERVAL = 1000;
+
+export const PLAYER_SPAWN_BODY_PARTS = 3;

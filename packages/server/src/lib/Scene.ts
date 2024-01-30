@@ -166,7 +166,6 @@ export class Scene {
         uniquePlayers.size > 0
           ? Array.from(uniquePlayers).map((p) => p.dto)
           : [],
-      food: [],
       orbs: player
         .chunksInView(this.chunks)
         .flatMap((c) => c.orbs.map((o) => o.dto)),

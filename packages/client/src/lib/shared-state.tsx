@@ -1,6 +1,6 @@
 "use client";
 
-import { type SceneDTO, ScoresDTO } from "@viper-vortex/shared";
+import { type SceneDTO, type ScoresDTO } from "@viper-vortex/shared";
 import { createContext, useContext, useState } from "react";
 import { type Socket } from "socket.io-client";
 

@@ -1,7 +1,7 @@
 /**
  * The number of ticks per second.
  */
-export const TPS = 20;
+export const TPS = 30;
 
 /**
  * The speed at which the player moves when walking.
@@ -15,7 +15,7 @@ export const SPRINT_SPEED = 300 / TPS;
 /**
  * The radius of the player's head.
  */
-export const FOOD_PICKUP_RADIUS = 20;
+export const PICKUP_RADIUS = 20;
 
 /**
  * The maximum angle the player can turn in one tick.

@@ -15,7 +15,11 @@ import {
 import { Socket } from "socket.io";
 import { Scene } from "./Scene.js";
 import { Chunk } from "./Chunk.js";
-import { CHUNK_SIZE, RENDER_DISTANCE } from "./constants.js";
+import {
+  CHUNK_SIZE,
+  PLAYER_SPAWN_BODY_PARTS,
+  RENDER_DISTANCE,
+} from "./constants.js";
 import { Orb } from "./Orb";
 
 export class Player {
@@ -36,7 +40,7 @@ export class Player {
   constructor(
     public readonly socket: Socket,
     public name: string,
-    public readonly position: Position,
+    public readonly position: Position
   ) {
     this.color = randomDarkColor();
     this.body.push({
@@ -97,7 +101,7 @@ export class Player {
     for (let x = -renderDistance; x <= renderDistance; x++) {
       for (let y = -renderDistance; y <= renderDistance; y++) {
         const chunk = chunks.get(
-          `${headChunk.topX / CHUNK_SIZE + x},${headChunk.topY / CHUNK_SIZE + y}`,
+          `${headChunk.topX / CHUNK_SIZE + x},${headChunk.topY / CHUNK_SIZE + y}`
         );
         if (chunk) {
           chunksInView.push(chunk);
@@ -158,8 +162,8 @@ export class Player {
               y: this.tail.y,
             },
             1,
-            this.color,
-          ),
+            this.color
+          )
         );
 
         this.score -= SCORE_PER_LOST_ORB;
@@ -202,7 +206,9 @@ export class Player {
   }
 
   public updateBody() {
-    const newLength = Math.max(1, Math.floor(this.score / SCORE_PER_BODY_PART));
+    const newLength =
+      Math.max(1, Math.floor(this.score / SCORE_PER_BODY_PART)) +
+      PLAYER_SPAWN_BODY_PARTS;
 
     while (this.body.length < newLength) {
       this.body.push({

@@ -94,5 +94,5 @@ export function Canvas(params: Params) {
     game.setScene(api.scene);
   }, [api.scene, game]);
 
-  return <canvas ref={canvasRef} className='w-full h-full dustBackground' height={screen.height} width={screen.width} />;
+  return <canvas ref={canvasRef} className='w-full h-full grid-bg' height={screen.height} width={screen.width} />;
 }

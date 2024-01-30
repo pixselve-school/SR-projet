@@ -1,21 +1,23 @@
-import { OrbDTO, Position, randomDarkColor } from "@viper-vortex/shared";
+import { OrbDTO, Position, getOrbSizeFromPoints, randomDarkColor } from "@viper-vortex/shared";
 import { v4 as uuidv4 } from "uuid";
 
 export class Orb {
   public readonly id: string;
+  public readonly size: number;
   constructor(
     public position: Position,
-    public size: number,
+    public points: number,
     public color: string = randomDarkColor(),
   ) {
     this.id = uuidv4();
+    this.size = getOrbSizeFromPoints(this.points);
   }
 
   get dto(): OrbDTO {
     return {
       id: this.id,
       position: this.position,
-      size: this.size,
+      points: this.points,
       color: this.color,
     };
   }

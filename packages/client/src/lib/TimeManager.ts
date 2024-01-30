@@ -8,11 +8,11 @@ export class TimeManager {
   private lastUpdate = performance.now();
   private lastFixedUpdate = performance.now();
   private tickCount = 0;
-  private fixedTickCount = 0;
   private deltaTime = 1;
   private fixedDeltaTime = 1;
   private updateCallbacks: Array<(deltaTime: number) => void> = [];
   private fixedUpdateCallbacks: Array<(deltaTime: number) => void> = [];
+  fixedTickCount = 0;
   isPaused = true;
   fps = 0;
   tps = 0;

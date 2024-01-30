@@ -1,41 +1,45 @@
-import { v4 as uuidv4 } from "uuid";
-import { FoodDTO, SceneDTO, PlayerDTO } from "./types";
+import { PlayerDTO } from "./types";
 
-/**
- * Create a new game map.
- * @returns {SceneDTO} The new game map.
- * @todo Handle food.
- */
-export function newScene(): SceneDTO {
-  const AMOUNT_OF_FOOD = 100;
-  return {
-    width: 1000,
-    height: 1000,
-    players: [],
-    food: randomFood(AMOUNT_OF_FOOD),
-    orbs: [],
-  };
-}
-
-export function randomFood(number: number = 1) {
-  const food: FoodDTO[] = [];
-  for (let i = 0; i < number; i++) {
-    food.push({
-      id: uuidv4(),
-      position: {
-        x: Math.floor(Math.random() * 1000),
-        y: Math.floor(Math.random() * 1000),
-      },
-    });
-  }
-  return food;
-}
+const colors = [
+  "#FF0000",
+  "#00FF00",
+  "#0000FF",
+  "#FFFF00",
+  "#FF00FF",
+  "#00FFFF",
+  "#FF00FF",
+  "#00FF7F",
+  "#00BFFF",
+  "#FFA500",
+  "#800080",
+  "#40E0D0",
+  "#FFD700",
+  "#FF7F50",
+  "#FF8C69",
+  "#8A2BE2",
+  "#F5F5DC",
+  "#808000",
+  "#800000",
+  "#008080",
+];
 
 export function randomDarkColor() {
-  const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-  return "#" + randomColor;
+  const index = Math.floor(Math.random() * colors.length);
+  return colors[index];
 }
 
 export function getPlayerHead(player: PlayerDTO) {
   return player.body[0];
+}
+
+export function getPlayerRadiusFromScore(score: number) {
+  const A = 1;
+  const B = 10;
+  return Math.sqrt((score * A) / Math.PI) + B;
+}
+
+export function getOrbSizeFromPoints(score: number) {
+  const A = 0.5;
+  const B = 0.5;
+  return Math.sqrt((score * A) / Math.PI) + B;
 }

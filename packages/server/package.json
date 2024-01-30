@@ -2,7 +2,7 @@
   "name": "@viper-vortex/server",
   "type": "module",
   "scripts": {
-    "dev": "tsx src/index.ts",
+    "dev": "tsx watch ./src/index.ts",
     "watch": "tsx watch ./src/index.ts",
     "build": "tsc",
     "start": "node ./dist/index.js"

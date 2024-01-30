@@ -1,11 +1,10 @@
-import { screenToWorld, worldToScreen } from "@/utils/position";
-import { type SceneDTO, type Position } from "@viper-vortex/shared";
 import { type Api } from "@/hooks/useApi";
-import { Food } from "./Food";
-import { Player } from "./Player";
-import { TimeManager } from "./TimeManager";
+import { screenToWorld, worldToScreen } from "@/utils/position";
+import { type Position, type SceneDTO } from "@viper-vortex/shared";
 import { MyPlayer } from "./MyPlayer";
 import { Orb } from "./Orb";
+import { Player } from "./Player";
+import { TimeManager } from "./TimeManager";
 
 export type Params = {
   centered: boolean;
@@ -21,16 +20,15 @@ export type Camera = {
 
 export class Game {
   private players: Record<string, Player> = {};
-  private foods: Record<string, Food> = {};
-  private orbs: Record<string, Food> = {};
+  private orbs: Record<string, Orb> = {};
   private mapSize = { width: 0, height: 0 };
   private me: MyPlayer | undefined;
   private params: Params = { centered: true };
   private api: Api | undefined;
-  private time: TimeManager;
-  private isSprinting = false;
   private angle = 0;
   private canvas: HTMLCanvasElement | null = null;
+  time: TimeManager;
+  isSprinting = false;
   camera: Camera = { offset: { x: 0, y: 0 }, zoom: 2 };
   cursor: Position = { x: 0, y: 0 };
   screen = { width: 0, height: 0 };
@@ -72,17 +70,6 @@ export class Game {
       }
     });
     notSeen.forEach((id) => delete this.players[id]);
-
-    const notSeenFood = new Set(Object.keys(this.foods));
-    scene.food.forEach((food) => {
-      notSeenFood.delete(food.id); // seen
-      if (!this.foods[food.id]) {
-        this.foods[food.id] = new Food(food, this);
-      } else {
-        this.foods[food.id]!.update(food);
-      }
-    });
-    notSeenFood.forEach((id) => delete this.foods[id]);
 
     const notSeenOrbs = new Set(Object.keys(this.orbs));
     scene.orbs.forEach((orb) => {
@@ -175,7 +162,7 @@ export class Game {
     const c = this.c;
     if (!c) return;
     const screenOrigin = worldToScreen({ x: 0, y: 0 }, this.camera);
-    c.lineWidth = 2;
+    c.lineWidth = 4;
     c.fillStyle = "transparent";
     c.rect(
       screenOrigin.x,
@@ -183,7 +170,7 @@ export class Game {
       this.mapSize.width * this.camera.zoom,
       this.mapSize.height * this.camera.zoom,
     );
-    c.strokeStyle = "black";
+    c.strokeStyle = "hsl(0, 0%, 30%)";
     c.stroke();
   }
 
@@ -195,9 +182,6 @@ export class Game {
 
     if (this.params.centered) this.centerCamera();
 
-    Object.values(this.foods).forEach((food) => {
-      food.draw();
-    });
     Object.values(this.players).forEach((player) => {
       player.draw();
     });
@@ -211,22 +195,17 @@ export class Game {
 
     // show fps top right
     this.c.fillStyle = "white";
-    this.c.font = "20px Arial";
+    this.c.font = "16px Arial";
     this.c.textAlign = "right";
     this.c.fillText(
       `FPS: ${Math.round(this.time.fps).toString()}`,
-      this.screen.width - 32,
-      32,
+      this.screen.width - 10,
+      20,
     );
     this.c.fillText(
       `TPS: ${Math.round(this.time.tps).toString()}`,
-      this.screen.width - 32,
-      64,
-    );
-    this.c.fillText(
-      `Sprinting: ${this.isSprinting ? "Yes" : "No"}`,
-      this.screen.width - 32,
-      128,
+      this.screen.width - 10,
+      40,
     );
   }
 
