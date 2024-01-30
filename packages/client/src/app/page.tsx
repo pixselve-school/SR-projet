@@ -27,15 +27,22 @@ export default function HomePage() {
   />
   return (
     <main className="flex h-full select-none flex-col items-center justify-center">
-      <div className="absolute right-0 bg-gray-400 p-4">
-        <div className="font-bold">Score</div>
-        <ul>
+      <div className="absolute right-0 top-0 bg-white/10 backdrop-blur-md rounded-lg text-white flex flex-col gap-2 p-4 m-4 pointer-events-none">
+        <h2 className="font-bold text-xl">Leaderboard</h2>
+        <div className="flex flex-col gap-2 w-80">
           {api.scores?.map((player) => (
-            <li key={player.name + player.score}>
-              {player.name}: {player.score}
-            </li>
+            <div key={player.name} className="flex justify-between gap-8 text-white/70">
+              <div className="flex justify-between max-w-60">
+                <span className='truncate'>
+                {player.name}
+                </span>
+              </div>
+              <div className="flex justify-between font-bold max-w-20 truncate">
+                {Math.round(player.score)}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
       {api.scene && <Canvas centered />}
     </main>

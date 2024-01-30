@@ -71,9 +71,9 @@ export class Player extends Entity {
     if (!head) return;
     const screenHead = worldToScreen(head, this.game.camera);
     c.font = "20px Arial";
-    c.fillStyle = "white";
+    c.fillStyle = "hsla(0, 10%, 74%, 0.753)";
     c.textAlign = "center";
-    c.fillText(this.name, screenHead.x, screenHead.y - 20);
+    c.fillText(this.name, screenHead.x, screenHead.y - 40);
   }
 
   interpolate() {

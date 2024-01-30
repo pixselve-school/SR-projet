@@ -194,17 +194,17 @@ export class Game {
     });
 
     // show fps top right
-    this.c.fillStyle = "white";
+    this.c.fillStyle = "hsla(0, 10%, 74%, 0.753)";
     this.c.font = "16px Arial";
-    this.c.textAlign = "right";
+    this.c.textAlign = "left";
     this.c.fillText(
       `FPS: ${Math.round(this.time.fps).toString()}`,
-      this.screen.width - 10,
+      10,
       20,
     );
     this.c.fillText(
       `TPS: ${Math.round(this.time.tps).toString()}`,
-      this.screen.width - 10,
+      10,
       40,
     );
   }
