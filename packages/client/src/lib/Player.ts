@@ -65,7 +65,6 @@ export class Player extends Entity {
     c.stroke();
     c.shadowBlur = 0;
 
-
     // draw names
     const head = this.getHead();
     if (!head) return;
@@ -74,6 +73,49 @@ export class Player extends Entity {
     c.fillStyle = "hsla(0, 10%, 74%, 0.753)";
     c.textAlign = "center";
     c.fillText(this.name, screenHead.x, screenHead.y - 40);
+
+    // draw eyes
+    const eyeRadius =
+      (getPlayerRadiusFromScore(this.score) * this.game.camera.zoom) / 5; // adjust eye size as needed
+    const eyeDistance =
+      (getPlayerRadiusFromScore(this.score) * this.game.camera.zoom) / 10; // adjust eye distance as needed
+    c.fillStyle = "white"; // eye color
+    c.beginPath();
+    c.arc(
+      screenHead.x - eyeDistance,
+      screenHead.y - eyeDistance,
+      eyeRadius,
+      0,
+      2 * Math.PI,
+    );
+    c.arc(
+      screenHead.x + eyeDistance,
+      screenHead.y - eyeDistance,
+      eyeRadius,
+      0,
+      2 * Math.PI,
+    );
+    c.fill();
+
+    // draw pupils
+    const pupilRadius = eyeRadius / 2; // adjust pupil size as needed
+    c.fillStyle = "black"; // pupil color
+    c.beginPath();
+    c.arc(
+      screenHead.x - eyeDistance,
+      screenHead.y - eyeDistance,
+      pupilRadius,
+      0,
+      2 * Math.PI,
+    );
+    c.arc(
+      screenHead.x + eyeDistance,
+      screenHead.y - eyeDistance,
+      pupilRadius,
+      0,
+      2 * Math.PI,
+    );
+    c.fill();
   }
 
   interpolate() {
