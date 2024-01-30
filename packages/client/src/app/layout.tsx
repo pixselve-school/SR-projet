@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   category: "Game",
   applicationName: "Viper Vortex",
   robots: "index, follow",
+  metadataBase: new URL("https://pixselve-school.github.io/"),
   authors: [
     {
       name: "Mael KERICHARD",
