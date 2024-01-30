@@ -16,7 +16,7 @@ export default function HomePage() {
     if (process.env.NODE_ENV === "production") {
       setServerUrl("sr.mael.app");
     }
-  },[])
+  }, [])
 
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function HomePage() {
             <div key={player.name} className="flex justify-between gap-8 text-white/70">
               <div className="flex justify-between max-w-60">
                 <span className='truncate'>
-                {player.name}
+                  {player.name}
                 </span>
               </div>
               <div className="flex justify-between font-bold max-w-20 truncate">
