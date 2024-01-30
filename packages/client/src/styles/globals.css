@@ -4,7 +4,7 @@
 
 .grid-bg {
     background-color: #450A0A;
-    background-image: url("/pattern.svg");
+    background-image: url("/SR-projet/pattern.svg");
     background-size: cover;
     background-position: var(--background-offset-x) var(--background-offset-y);
     background-repeat: repeat;
