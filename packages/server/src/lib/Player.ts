@@ -20,7 +20,7 @@ import {
   PLAYER_SPAWN_BODY_PARTS,
   RENDER_DISTANCE,
 } from "./constants.js";
-import { Orb } from "./Orb";
+import { Orb } from "./Orb.js";
 
 export class Player {
   private isSprinting: boolean = false;
@@ -40,7 +40,7 @@ export class Player {
   constructor(
     public readonly socket: Socket,
     public name: string,
-    public readonly position: Position
+    public readonly position: Position,
   ) {
     this.color = randomDarkColor();
     this.body.push({
@@ -101,7 +101,7 @@ export class Player {
     for (let x = -renderDistance; x <= renderDistance; x++) {
       for (let y = -renderDistance; y <= renderDistance; y++) {
         const chunk = chunks.get(
-          `${headChunk.topX / CHUNK_SIZE + x},${headChunk.topY / CHUNK_SIZE + y}`
+          `${headChunk.topX / CHUNK_SIZE + x},${headChunk.topY / CHUNK_SIZE + y}`,
         );
         if (chunk) {
           chunksInView.push(chunk);
@@ -162,8 +162,8 @@ export class Player {
               y: this.tail.y,
             },
             1,
-            this.color
-          )
+            this.color,
+          ),
         );
 
         this.score -= SCORE_PER_LOST_ORB;
