@@ -10,7 +10,7 @@ export function encode<T>(
 
 export function decode<T>(
   buffer: ArrayBuffer,
-  typeView: ViewConstructor<T, ComplexView<T>>
+  typeView: ViewConstructor<T, any>
 ): T {
   return typeView.decode(new DataView(buffer));
 }

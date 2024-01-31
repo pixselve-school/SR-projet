@@ -82,6 +82,7 @@ export class Chunk {
   }
 
   public addOrb(orb: Orb) {
+    console.log('adding orb');
     // check if orb is in chunk
     if (!this.isPointInChunk(orb.position)) {
       throw new Error('Orb is not in chunk');
@@ -108,6 +109,7 @@ export class Chunk {
   }
 
   public subscribe(socket: Socket) {
+    console.log('subscribing');
     this.subscribers.set(socket.id, socket);
     // send a load chunk message
     socket.emit(
@@ -137,6 +139,7 @@ export class Chunk {
   }
 
   public unsubscribe(socket: Socket) {
+    console.log('unsubscribing');
     // send an unload chunk message
     socket.emit(
       SOCKET_EVENTS.REMOVE_CHUNK,

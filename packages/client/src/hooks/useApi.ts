@@ -4,12 +4,17 @@ import {
   type SceneDTO,
   type PlayerMoveDTO,
   ScoresDTO,
+  decode,
+  AddOrbView,
+  OrbDTO,
+  colors,
+  RemoveOrbView,
 } from "@viper-vortex/shared";
 import { useCallback, useEffect } from "react";
 import { io } from "socket.io-client";
-import { packetToOrbs } from "@viper-vortex/shared/dist/protocol";
+import { Game } from "@/lib/Game";
 
-export function useApi() {
+export function useApi(game?: Game) {
   const {
     sharedState: { isConnected, scene, socket, scores, orbs },
     updateState,
@@ -52,24 +57,42 @@ export function useApi() {
       updateState({ scores });
     }
 
-    function handleOrbs(orbs: ArrayBuffer) {
-      const orbsArray = packetToOrbs(orbs);
-      updateState({
-        orbs: orbsArray,
-      });
+    function handleOrbs(orbsToAddBuffer: ArrayBuffer) {
+      if (!game) return;
+      const orbsToAdd = decode(orbsToAddBuffer, AddOrbView);
+      console.log(orbsToAdd);
+      game.addOrbs(
+        orbsToAdd.map((orb) => ({
+          id: orb.id,
+          points: orb.points,
+          color: colors[orb.color] as string,
+          position: {
+            x: orb.x,
+            y: orb.y,
+          },
+        })),
+      );
+    }
+
+    function handleRemoveOrbs(orbsToRemoveBuffer: ArrayBuffer) {
+      if (!game) return;
+      const orbsToRemove = decode(orbsToRemoveBuffer, RemoveOrbView);
+      game.removeOrb(orbsToRemove.id);
     }
 
     socket?.on("connect", handleConnect);
     socket?.on("disconnect", handleDisconnect);
     socket?.on(SOCKET_EVENTS.FRAME, handleFrame);
     socket?.on(SOCKET_EVENTS.SCORES, handleScores);
-    socket?.on(SOCKET_EVENTS.ORBS, handleOrbs);
+    socket?.on(SOCKET_EVENTS.ADD_ORB, handleOrbs);
+    socket?.on(SOCKET_EVENTS.REMOVE_ORB, handleRemoveOrbs);
     return () => {
       socket?.off("connect", handleConnect);
       socket?.off("disconnect", handleDisconnect);
       socket?.off(SOCKET_EVENTS.FRAME, handleFrame);
       socket?.off(SOCKET_EVENTS.SCORES, handleScores);
       socket?.off(SOCKET_EVENTS.ORBS, handleOrbs);
+      socket?.off(SOCKET_EVENTS.REMOVE_ORB, handleRemoveOrbs);
     };
   }, [updateState, socket]);
 

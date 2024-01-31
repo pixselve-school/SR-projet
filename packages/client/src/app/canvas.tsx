@@ -8,11 +8,11 @@ import { type Params } from "@/lib/Game";
 import { useEffect, useRef } from "react";
 
 export function Canvas(params: Params) {
-  const api = useApi();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const cursorScreen = useMouse(canvasRef);
   const screen = useScreen();
   const game = useGame();
+  const api = useApi(game);
   useEffect(() => {
     if (!game) return;
     function handleKeyDown(e: KeyboardEvent) {
@@ -92,11 +92,6 @@ export function Canvas(params: Params) {
     if (!api.scene) return;
     game.setScene(api.scene);
   }, [api.scene, game]);
-
-  useEffect(() => {
-    if (!game) return;
-    game.setOrbs(api.orbs);
-  }, [api.orbs, game]);
 
   return (
     <canvas

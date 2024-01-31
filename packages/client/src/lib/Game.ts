@@ -72,17 +72,14 @@ export class Game {
     notSeen.forEach((id) => delete this.players[id]);
   }
 
-  setOrbs(orbs: OrbDTO[]) {
-    const notSeenOrbs = new Set(Object.keys(this.orbs));
+  addOrbs(orbs: OrbDTO[]) {
     orbs.forEach((orb) => {
-      notSeenOrbs.delete(orb.id); // seen
-      if (!this.orbs[orb.id]) {
-        this.orbs[orb.id] = new Orb(orb, this);
-      } else {
-        this.orbs[orb.id]!.update(orb);
-      }
+      this.orbs[orb.id] = new Orb(orb, this);
     });
-    notSeenOrbs.forEach((id) => delete this.orbs[id]);
+  }
+
+  removeOrb(orbId: string) {
+    delete this.orbs[orbId];
   }
 
   setCursor(cursorScreen: Position) {

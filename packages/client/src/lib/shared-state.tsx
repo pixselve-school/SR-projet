@@ -9,7 +9,7 @@ type SharedState = {
   isConnected?: boolean;
   socket?: Socket;
   scores?: ScoresDTO;
-  orbs: OrbDTO[];
+  orbs: Map<string, OrbDTO>;
 };
 type Context = {
   sharedState: SharedState;
@@ -32,7 +32,7 @@ export function SharedStateProvider({
     isConnected: false,
     socket: undefined,
     scores: undefined,
-    orbs: [],
+    orbs: new Map(),
   });
 
   const updateSharedState = (newState: Partial<SharedState>) => {
