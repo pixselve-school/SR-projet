@@ -44,19 +44,9 @@ export const SCORE_PER_GAINED_ORB = SCORE_PER_LOST_ORB * 0.3;
 export const SCORE_PER_BODY_PART = 10;
 
 /**
- * The amount of score gained per food.
- */
-export const SCORE_PER_FOOD = SCORE_PER_BODY_PART;
-
-/**
  * The minimum score required to sprint.
  */
 export const MIN_SCORE_TO_SPRINT = SCORE_PER_BODY_PART * 4;
-
-export const MAP_WIDTH = 10000;
-export const MAP_HEIGHT = 10000;
-
-export const FIELD_OF_VIEW_RADIUS = 500;
 
 /**
  * Enum for socket events.
@@ -71,4 +61,8 @@ export enum SOCKET_EVENTS {
   DEATH = 'death',
   SCORES = 'scores',
   ORBS = 'o',
+  ADD_ORB = 'add_orb',
+  REMOVE_ORB = 'remove_orb',
+  LOAD_CHUNK = 'load_chunk',
+  REMOVE_CHUNK = 'remove_chunk',
 }
