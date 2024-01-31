@@ -1,26 +1,44 @@
 import { CHUNK_SIZE, FOOD_POINTS, FOOD_PER_CHUNK } from './constants.js';
 import { Orb } from './Orb.js';
-import { PICKUP_RADIUS, Position } from '@viper-vortex/shared';
+import {
+  AddOrbView,
+  encode,
+  PICKUP_RADIUS,
+  Position,
+  RemoveOrbView,
+  SOCKET_EVENTS,
+} from '@viper-vortex/shared';
 import { Player } from './Player.js';
+import { Socket } from 'socket.io';
+import { LoadRemoveChunkView } from '@viper-vortex/shared/dist/messages/load-remove-chunk';
 
 export class Chunk {
   constructor(
     public topX: number,
     public topY: number,
-    public orbs: Orb[] = [],
+
+    public orbs: Map<string, Orb> = new Map(),
+
     private players: Map<string, Player> = new Map(),
-    public loaded = false
+
+    public loaded = false,
+
+    public subscribers: Map<string, Socket> = new Map()
   ) {}
 
   public load() {
     this.loaded = true;
-    this.orbs = this.generateOrbs();
+    const orbs = this.generateOrbs();
+    this.orbs = orbs.reduce((acc, orb) => {
+      acc.set(orb.id, orb);
+      return acc;
+    }, new Map());
     this.players = new Map();
   }
 
   public unload() {
     this.loaded = false;
-    this.orbs = [];
+    this.orbs = new Map();
   }
 
   public removePlayer(player: Player) {
@@ -48,7 +66,19 @@ export class Chunk {
   }
 
   public removeOrb(orb: Orb) {
-    this.orbs = this.orbs.filter((o) => o.id !== orb.id);
+    this.orbs.delete(orb.id);
+    // broadcast orb removal
+    this.subscribers.forEach((socket) => {
+      socket.emit(
+        SOCKET_EVENTS.REMOVE_ORB,
+        encode(
+          {
+            id: orb.id,
+          },
+          RemoveOrbView
+        )
+      );
+    });
   }
 
   public addOrb(orb: Orb) {
@@ -56,11 +86,67 @@ export class Chunk {
     if (!this.isPointInChunk(orb.position)) {
       throw new Error('Orb is not in chunk');
     }
-    this.orbs.push(orb);
+    this.orbs.set(orb.id, orb);
+    // broadcast orb addition
+    this.subscribers.forEach((socket) => {
+      socket.emit(
+        SOCKET_EVENTS.ADD_ORB,
+        encode(
+          [
+            {
+              id: orb.id,
+              x: orb.position.x,
+              y: orb.position.y,
+              points: orb.points,
+              color: orb.colorIndex,
+            },
+          ],
+          AddOrbView
+        )
+      );
+    });
+  }
+
+  public subscribe(socket: Socket) {
+    this.subscribers.set(socket.id, socket);
+    // send a load chunk message
+    socket.emit(
+      SOCKET_EVENTS.LOAD_CHUNK,
+      encode(
+        {
+          x: this.topX,
+          y: this.topY,
+        },
+        LoadRemoveChunkView
+      )
+    );
+    // send all orbs
+    socket.emit(
+      SOCKET_EVENTS.ADD_ORB,
+      encode(
+        Array.from(this.orbs.values()).map((orb) => ({
+          id: orb.id,
+          x: orb.position.x,
+          y: orb.position.y,
+          points: orb.points,
+          color: orb.colorIndex,
+        })),
+        AddOrbView
+      )
+    );
+  }
+
+  public unsubscribe(socket: Socket) {
+    // send an unload chunk message
+    socket.emit(
+      SOCKET_EVENTS.REMOVE_CHUNK,
+      encode({ x: this.topX, y: this.topY }, LoadRemoveChunkView)
+    );
+    this.subscribers.delete(socket.id);
   }
 
   public getCollidingOrbsWithPlayer(player: Player): Orb[] {
-    return this.orbs.filter((orb) =>
+    return Array.from(this.orbs.values()).filter((orb) =>
       orb.isColliding(player.head, PICKUP_RADIUS)
     );
   }

@@ -1,5 +1,6 @@
 import { colors } from '../utils.js';
-import { view } from './index.js';
+import { View } from 'structurae';
+const view = new View();
 
 interface AddOrb {
   points: number;
@@ -9,10 +10,11 @@ interface AddOrb {
   y: number;
 }
 
-export const AddOrbView = view.create<AddOrb[]>({
+export const AddOrbView = view.create<Array<AddOrb>>({
   type: 'array',
   $id: 'AddOrbs',
   items: {
+    $id: 'AddOrb',
     type: 'object',
     properties: {
       id: { type: 'string', minLength: 5, maxLength: 5 },

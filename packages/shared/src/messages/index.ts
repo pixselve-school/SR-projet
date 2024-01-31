@@ -1,7 +1,5 @@
-import { View, ViewConstructor } from 'structurae';
+import { ViewConstructor } from 'structurae';
 import { ComplexView } from 'structurae/view-types';
-
-export const view = new View();
 
 export function encode<T>(
   message: T,
@@ -19,3 +17,4 @@ export function decode<T>(
 
 export * from './add-orb.js';
 export * from './remove-orb.js';
+export * from './load-remove-chunk.js';

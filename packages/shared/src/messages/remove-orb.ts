@@ -1,4 +1,6 @@
-import { view } from './index.js';
+import { View } from 'structurae';
+
+const view = new View();
 
 interface RemoveOrb {
   id: string;

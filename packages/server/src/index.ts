@@ -45,20 +45,8 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
 setInterval(() => {
   scene.update();
   for (let player of scene.playerArray) {
-    const { orbs, ...scenePov } = scene.povDto(player);
-    player.socket.emit(SOCKET_EVENTS.FRAME, { ...scenePov, orbs: [] });
-    player.socket.emit(
-      SOCKET_EVENTS.ORBS,
-      orbsToPacket(
-        orbs.map((orb) => ({
-          y: orb.position.y,
-          x: orb.position.x,
-          points: orb.points,
-          color: orb.colorIndex,
-          id: orb.id,
-        }))
-      )
-    );
+    const scenePov = scene.povDto(player);
+    player.socket.emit(SOCKET_EVENTS.FRAME, scenePov);
   }
 }, 1000 / TPS);
 

@@ -83,11 +83,24 @@ export class Scene {
       const headChunk = player.headChunk;
       const tailChunk = player.tailChunk;
 
+      const oldChunksInView = player.chunksInView(this.chunks);
+
       player.update(this);
       player.updateHeadTailChunks(this.chunks);
 
       if (headChunk !== player.headChunk) {
         player.headChunk!.addPlayer(player);
+        // player has moved to a new chunk
+        // subscribe to new chunks
+        const newChunksInView = player.chunksInView(this.chunks);
+        const chunksToSubscribe = newChunksInView.filter(
+          (c) => !oldChunksInView.includes(c)
+        );
+        const chunksToUnsubscribe = oldChunksInView.filter(
+          (c) => !newChunksInView.includes(c)
+        );
+        chunksToSubscribe.forEach((c) => c.subscribe(player.socket));
+        chunksToUnsubscribe.forEach((c) => c.unsubscribe(player.socket));
       }
 
       if (tailChunk && tailChunk !== player.tailChunk) {
@@ -157,7 +170,7 @@ export class Scene {
    * Returns the scene data for a player
    * @param player player to get the data for
    */
-  public povDto(player: Player): SceneDTO & { orbs: Orb[] } {
+  public povDto(player: Player): SceneDTO {
     const uniquePlayers = new Set<Player>();
     uniquePlayers.add(player);
     player.chunksInView(this.chunks).forEach((c) => {
@@ -171,7 +184,6 @@ export class Scene {
         uniquePlayers.size > 0
           ? Array.from(uniquePlayers).map((p) => p.dto)
           : [],
-      orbs: player.chunksInView(this.chunks).flatMap((c) => c.orbs),
     };
   }
 
