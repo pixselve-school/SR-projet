@@ -4,7 +4,7 @@ import {
   getOrbSizeFromPoints,
   randomDarkColor,
 } from '@viper-vortex/shared';
-import { v4 as uuidv4 } from 'uuid';
+import { uid } from './utils';
 
 export class Orb {
   public readonly id: string;
@@ -14,7 +14,7 @@ export class Orb {
     public points: number,
     public color: string = randomDarkColor()
   ) {
-    this.id = uuidv4();
+    this.id = uid.rnd();
     this.size = getOrbSizeFromPoints(this.points);
   }
 

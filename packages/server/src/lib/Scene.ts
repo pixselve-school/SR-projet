@@ -12,7 +12,6 @@ import {
   MAP_CHUNKS_WIDTH,
 } from './constants.js';
 import { Orb } from './Orb.js';
-import { Socket } from 'socket.io';
 
 export class Scene {
   public readonly width: number;

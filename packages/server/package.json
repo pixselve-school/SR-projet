@@ -3,7 +3,6 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch ./src/index.ts",
-    "watch": "tsx watch ./src/index.ts",
     "build": "tsc",
     "start": "node ./dist/index.js"
   },
@@ -11,7 +10,8 @@
     "socket.io": "^4.7.4",
     "bufferutil": "^4.0.8",
     "utf-8-validate": "^6.0.3",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "short-unique-id": "^5.0.3"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.3",
