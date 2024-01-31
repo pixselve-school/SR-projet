@@ -12,6 +12,7 @@
     "@types/uuid": "^9.0.7"
   },
   "dependencies": {
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "structurae": "^4.0.2"
   }
 }

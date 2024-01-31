@@ -7,10 +7,11 @@ import {
 } from "@viper-vortex/shared";
 import { useCallback, useEffect } from "react";
 import { io } from "socket.io-client";
+import { packetToOrbs } from "@viper-vortex/shared/dist/protocol";
 
 export function useApi() {
   const {
-    sharedState: { isConnected, scene, socket, scores },
+    sharedState: { isConnected, scene, socket, scores, orbs },
     updateState,
   } = useSharedState();
 
@@ -51,15 +52,24 @@ export function useApi() {
       updateState({ scores });
     }
 
+    function handleOrbs(orbs: ArrayBuffer) {
+      const orbsArray = packetToOrbs(orbs);
+      updateState({
+        orbs: orbsArray,
+      });
+    }
+
     socket?.on("connect", handleConnect);
     socket?.on("disconnect", handleDisconnect);
     socket?.on(SOCKET_EVENTS.FRAME, handleFrame);
     socket?.on(SOCKET_EVENTS.SCORES, handleScores);
+    socket?.on(SOCKET_EVENTS.ORBS, handleOrbs);
     return () => {
       socket?.off("connect", handleConnect);
       socket?.off("disconnect", handleDisconnect);
       socket?.off(SOCKET_EVENTS.FRAME, handleFrame);
       socket?.off(SOCKET_EVENTS.SCORES, handleScores);
+      socket?.off(SOCKET_EVENTS.ORBS, handleOrbs);
     };
   }, [updateState, socket]);
 
@@ -71,6 +81,7 @@ export function useApi() {
     scene,
     isConnected,
     scores,
+    orbs,
   };
 }
 

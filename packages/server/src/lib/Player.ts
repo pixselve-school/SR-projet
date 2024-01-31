@@ -1,5 +1,6 @@
 import {
   BASE_SPEED,
+  colors,
   getPlayerRadiusFromScore,
   MAX_ANGLE,
   MIN_SCORE_TO_SPRINT,
@@ -33,7 +34,7 @@ export class Player {
   private orbToDrop: number = 0;
   public score: number = 0;
   public body: Position[] = [];
-  public readonly color: string;
+  public readonly colorIndex: number;
 
   public headChunk: Chunk | undefined;
   public tailChunk: Chunk | undefined;
@@ -43,7 +44,7 @@ export class Player {
     public name: string,
     public readonly position: Position
   ) {
-    this.color = randomDarkColor();
+    this.colorIndex = randomDarkColor();
     this.body.push({
       x: position.x,
       y: position.y,
@@ -61,6 +62,10 @@ export class Player {
       body: this.body,
       score: this.score,
     };
+  }
+
+  get color(): string {
+    return colors[this.colorIndex];
   }
 
   /**
@@ -167,7 +172,7 @@ export class Player {
               y: this.tail.y,
             },
             1,
-            this.color
+            this.colorIndex
           )
         );
 

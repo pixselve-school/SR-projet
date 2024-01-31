@@ -1,6 +1,6 @@
 import { type Api } from "@/hooks/useApi";
 import { screenToWorld, worldToScreen } from "@/utils/position";
-import { type Position, type SceneDTO } from "@viper-vortex/shared";
+import { OrbDTO, type Position, type SceneDTO } from "@viper-vortex/shared";
 import { MyPlayer } from "./MyPlayer";
 import { Orb } from "./Orb";
 import { Player } from "./Player";
@@ -70,9 +70,11 @@ export class Game {
       }
     });
     notSeen.forEach((id) => delete this.players[id]);
+  }
 
+  setOrbs(orbs: OrbDTO[]) {
     const notSeenOrbs = new Set(Object.keys(this.orbs));
-    scene.orbs.forEach((orb) => {
+    orbs.forEach((orb) => {
       notSeenOrbs.delete(orb.id); // seen
       if (!this.orbs[orb.id]) {
         this.orbs[orb.id] = new Orb(orb, this);
@@ -197,16 +199,8 @@ export class Game {
     this.c.fillStyle = "hsla(0, 10%, 74%, 0.753)";
     this.c.font = "16px Arial";
     this.c.textAlign = "left";
-    this.c.fillText(
-      `FPS: ${Math.round(this.time.fps).toString()}`,
-      10,
-      20,
-    );
-    this.c.fillText(
-      `TPS: ${Math.round(this.time.tps).toString()}`,
-      10,
-      40,
-    );
+    this.c.fillText(`FPS: ${Math.round(this.time.fps).toString()}`, 10, 20);
+    this.c.fillText(`TPS: ${Math.round(this.time.tps).toString()}`, 10, 40);
   }
 
   fixedUpdate() {

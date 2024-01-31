@@ -1,17 +1,16 @@
 "use client";
 
-import { useApi } from '@/hooks/useApi';
-import { useGame } from '@/hooks/useGame';
-import { useMouse } from '@/hooks/useMouse';
-import { useScreen } from '@/hooks/useScreen';
-import { type Params } from '@/lib/Game';
-import { useEffect, useRef } from 'react';
-
+import { useApi } from "@/hooks/useApi";
+import { useGame } from "@/hooks/useGame";
+import { useMouse } from "@/hooks/useMouse";
+import { useScreen } from "@/hooks/useScreen";
+import { type Params } from "@/lib/Game";
+import { useEffect, useRef } from "react";
 
 export function Canvas(params: Params) {
   const api = useApi();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const cursorScreen = useMouse(canvasRef)
+  const cursorScreen = useMouse(canvasRef);
   const screen = useScreen();
   const game = useGame();
   useEffect(() => {
@@ -19,22 +18,22 @@ export function Canvas(params: Params) {
     function handleKeyDown(e: KeyboardEvent) {
       if (!game) return;
       // esacpe
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         game.togglePause();
       }
       // space
-      if (e.key === ' ') {
+      if (e.key === " ") {
         game.setSpriniting(true);
       }
     }
     function handleKeyUp(e: KeyboardEvent) {
       if (!game) return;
       // space
-      if (e.key === ' ') {
+      if (e.key === " ") {
         game.setSpriniting(false);
       }
     }
-    
+
     function handleMouseDown(e: MouseEvent) {
       if (!game) return;
       if (e.button === 0) {
@@ -48,16 +47,16 @@ export function Canvas(params: Params) {
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseup", handleMouseUp);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keyup', handleKeyUp);
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
-    }
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
   }, [game]);
 
   useEffect(() => {
@@ -73,7 +72,7 @@ export function Canvas(params: Params) {
   useEffect(() => {
     if (!game) return;
     game.setCanvas(canvasRef.current);
-    const c = canvasRef.current?.getContext('2d');
+    const c = canvasRef.current?.getContext("2d");
     if (!c) return;
     game.setContext(c);
   }, [game]);
@@ -94,5 +93,17 @@ export function Canvas(params: Params) {
     game.setScene(api.scene);
   }, [api.scene, game]);
 
-  return <canvas ref={canvasRef} className='w-full h-full grid-bg' height={screen.height} width={screen.width} />;
+  useEffect(() => {
+    if (!game) return;
+    game.setOrbs(api.orbs);
+  }, [api.orbs, game]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="grid-bg h-full w-full"
+      height={screen.height}
+      width={screen.width}
+    />
+  );
 }

@@ -63,11 +63,12 @@ export const FIELD_OF_VIEW_RADIUS = 500;
  * @enum {string}
  */
 export enum SOCKET_EVENTS {
-  CONNECT = "connect",
-  JOIN = "join",
-  DISCONNECT = "disconnect",
-  MOVE = "move",
-  FRAME = "frame",
-  DEATH = "death",
-  SCORES = "scores",
+  CONNECT = 'connect',
+  JOIN = 'join',
+  DISCONNECT = 'disconnect',
+  MOVE = 'move',
+  FRAME = 'frame',
+  DEATH = 'death',
+  SCORES = 'scores',
+  ORBS = 'o',
 }

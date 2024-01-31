@@ -3,6 +3,7 @@ import {
   Position,
   getOrbSizeFromPoints,
   randomDarkColor,
+  colors,
 } from '@viper-vortex/shared';
 import { uid } from './utils';
 
@@ -12,7 +13,7 @@ export class Orb {
   constructor(
     public position: Position,
     public points: number,
-    public color: string = randomDarkColor()
+    public colorIndex: number = randomDarkColor()
   ) {
     this.id = uid.rnd();
     this.size = getOrbSizeFromPoints(this.points);
@@ -25,6 +26,10 @@ export class Orb {
       points: this.points,
       color: this.color,
     };
+  }
+
+  get color(): string {
+    return colors[this.colorIndex];
   }
 
   public isColliding(position: Position, radius: number): boolean {

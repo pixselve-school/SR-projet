@@ -5,7 +5,6 @@ export type SceneDTO = {
   width: number;
   height: number;
   players: PlayerDTO[];
-  orbs: OrbDTO[];
 };
 
 /**

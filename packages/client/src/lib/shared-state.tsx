@@ -1,6 +1,6 @@
 "use client";
 
-import { type SceneDTO, type ScoresDTO } from "@viper-vortex/shared";
+import { OrbDTO, type SceneDTO, type ScoresDTO } from "@viper-vortex/shared";
 import { createContext, useContext, useState } from "react";
 import { type Socket } from "socket.io-client";
 
@@ -9,6 +9,7 @@ type SharedState = {
   isConnected?: boolean;
   socket?: Socket;
   scores?: ScoresDTO;
+  orbs: OrbDTO[];
 };
 type Context = {
   sharedState: SharedState;
@@ -31,6 +32,7 @@ export function SharedStateProvider({
     isConnected: false,
     socket: undefined,
     scores: undefined,
+    orbs: [],
   });
 
   const updateSharedState = (newState: Partial<SharedState>) => {

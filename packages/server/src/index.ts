@@ -3,6 +3,7 @@ import { Server } from 'socket.io';
 import { Player } from './lib/Player.js';
 import { Scene } from './lib/Scene.js';
 import { SEND_SCORES_INTERVAL } from './lib/constants.js';
+import { orbsToPacket } from '@viper-vortex/shared/dist/protocol';
 
 const io = new Server({
   cors: {
@@ -39,9 +40,21 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
 
 setInterval(() => {
   scene.update();
-
   for (let player of scene.playerArray) {
-    player.socket.emit(SOCKET_EVENTS.FRAME, scene.povDto(player));
+    const { orbs, ...scenePov } = scene.povDto(player);
+    player.socket.emit(SOCKET_EVENTS.FRAME, { ...scenePov, orbs: [] });
+    player.socket.emit(
+      SOCKET_EVENTS.ORBS,
+      orbsToPacket(
+        orbs.map((orb) => ({
+          y: orb.position.y,
+          x: orb.position.x,
+          points: orb.points,
+          color: orb.colorIndex,
+          id: orb.id,
+        }))
+      )
+    );
   }
 }, 1000 / TPS);
 

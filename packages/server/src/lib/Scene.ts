@@ -116,7 +116,7 @@ export class Scene {
                   y: player.body[i].y,
                 },
                 BODY_PART_PER_ORB * SCORE_PER_BODY_PART,
-                player.color
+                player.colorIndex
               )
             );
           }
@@ -157,7 +157,7 @@ export class Scene {
    * Returns the scene data for a player
    * @param player player to get the data for
    */
-  public povDto(player: Player): SceneDTO {
+  public povDto(player: Player): SceneDTO & { orbs: Orb[] } {
     const uniquePlayers = new Set<Player>();
     uniquePlayers.add(player);
     player.chunksInView(this.chunks).forEach((c) => {
@@ -171,9 +171,7 @@ export class Scene {
         uniquePlayers.size > 0
           ? Array.from(uniquePlayers).map((p) => p.dto)
           : [],
-      orbs: player
-        .chunksInView(this.chunks)
-        .flatMap((c) => c.orbs.map((o) => o.dto)),
+      orbs: player.chunksInView(this.chunks).flatMap((c) => c.orbs),
     };
   }
 
