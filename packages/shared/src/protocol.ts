@@ -1,6 +1,6 @@
 import { View } from 'structurae';
-import { colors } from './utils';
-import { OrbDTO } from './types';
+import { colors } from './utils.js';
+import { OrbDTO } from './types.js';
 
 const view = new View();
 

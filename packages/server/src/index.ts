@@ -1,9 +1,13 @@
-import { SOCKET_EVENTS, TPS, PlayerMoveDTO } from '@viper-vortex/shared';
+import {
+  SOCKET_EVENTS,
+  TPS,
+  PlayerMoveDTO,
+  orbsToPacket,
+} from '@viper-vortex/shared';
 import { Server } from 'socket.io';
 import { Player } from './lib/Player.js';
 import { Scene } from './lib/Scene.js';
 import { SEND_SCORES_INTERVAL } from './lib/constants.js';
-import { orbsToPacket } from '@viper-vortex/shared/dist/protocol';
 
 const io = new Server({
   cors: {

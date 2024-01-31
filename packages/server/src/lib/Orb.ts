@@ -5,7 +5,7 @@ import {
   randomDarkColor,
   colors,
 } from '@viper-vortex/shared';
-import { uid } from './utils';
+import { uid } from './utils.js';
 
 export class Orb {
   public readonly id: string;

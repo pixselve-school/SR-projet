@@ -1,4 +1,4 @@
-import { PlayerDTO } from './types';
+import { PlayerDTO } from './types.js';
 
 export const colors = [
   '#FF0000',
