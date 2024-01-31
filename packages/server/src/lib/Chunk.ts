@@ -1,7 +1,7 @@
-import { CHUNK_SIZE, FOOD_POINTS, FOOD_PER_CHUNK } from "./constants.js";
-import { Orb } from "./Orb.js";
-import { PICKUP_RADIUS, Position } from "@viper-vortex/shared";
-import { Player } from "./Player.js";
+import { CHUNK_SIZE, FOOD_POINTS, FOOD_PER_CHUNK } from './constants.js';
+import { Orb } from './Orb.js';
+import { PICKUP_RADIUS, Position } from '@viper-vortex/shared';
+import { Player } from './Player.js';
 
 export class Chunk {
   constructor(
@@ -9,7 +9,7 @@ export class Chunk {
     public topY: number,
     public orbs: Orb[] = [],
     private players: Map<string, Player> = new Map(),
-    public loaded = false,
+    public loaded = false
   ) {}
 
   public load() {
@@ -54,20 +54,20 @@ export class Chunk {
   public addOrb(orb: Orb) {
     // check if orb is in chunk
     if (!this.isPointInChunk(orb.position)) {
-      throw new Error("Orb is not in chunk");
+      throw new Error('Orb is not in chunk');
     }
     this.orbs.push(orb);
   }
 
   public getCollidingOrbsWithPlayer(player: Player): Orb[] {
     return this.orbs.filter((orb) =>
-      orb.isColliding(player.head, PICKUP_RADIUS),
+      orb.isColliding(player.head, PICKUP_RADIUS)
     );
   }
 
   public getCollidingPlayersWithPlayer(player: Player): Player[] {
     return this.playerArray.filter(
-      (p) => p.id !== player.id && p.isColliding(player.head, PICKUP_RADIUS),
+      (p) => p.id !== player.id && p.isColliding(player.head, PICKUP_RADIUS)
     );
   }
 

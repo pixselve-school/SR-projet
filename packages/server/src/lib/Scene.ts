@@ -1,13 +1,18 @@
-import { Position, SceneDTO, SCORE_PER_GAINED_ORB } from "@viper-vortex/shared";
-import { Player } from "./Player.js";
-import { Chunk } from "./Chunk.js";
+import {
+  Position,
+  SceneDTO,
+  SCORE_PER_BODY_PART,
+  SCORE_PER_GAINED_ORB,
+} from '@viper-vortex/shared';
+import { Player } from './Player.js';
+import { Chunk } from './Chunk.js';
 import {
   BODY_PART_PER_ORB,
   CHUNK_SIZE,
   MAP_CHUNKS_WIDTH,
-} from "./constants.js";
-import { Orb } from "./Orb.js";
-import { Socket } from "socket.io";
+} from './constants.js';
+import { Orb } from './Orb.js';
+import { Socket } from 'socket.io';
 
 export class Scene {
   public readonly width: number;
@@ -111,8 +116,9 @@ export class Scene {
                   x: player.body[i].x,
                   y: player.body[i].y,
                 },
-                BODY_PART_PER_ORB,
-              ),
+                BODY_PART_PER_ORB * SCORE_PER_BODY_PART,
+                player.color
+              )
             );
           }
         }

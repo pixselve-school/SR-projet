@@ -1,12 +1,12 @@
-import { SOCKET_EVENTS, TPS, PlayerMoveDTO } from "@viper-vortex/shared";
-import { Server } from "socket.io";
-import { Player } from "./lib/Player.js";
-import { Scene } from "./lib/Scene.js";
-import { SEND_SCORES_INTERVAL } from "./lib/constants.js";
+import { SOCKET_EVENTS, TPS, PlayerMoveDTO } from '@viper-vortex/shared';
+import { Server } from 'socket.io';
+import { Player } from './lib/Player.js';
+import { Scene } from './lib/Scene.js';
+import { SEND_SCORES_INTERVAL } from './lib/constants.js';
 
 const io = new Server({
   cors: {
-    origin: "*", //TODO: change this to the actual frontend url
+    origin: '*', //TODO: change this to the actual frontend url
   },
 });
 
@@ -50,7 +50,7 @@ setInterval(() => {
     SOCKET_EVENTS.SCORES,
     scene
       .getTopPlayers()
-      .map((player) => ({ name: player.name, score: player.score })),
+      .map((player) => ({ name: player.name, score: player.score }))
   );
 }, SEND_SCORES_INTERVAL);
 
