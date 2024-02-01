@@ -1,117 +1,128 @@
 "use client";
 
-import { useApi } from "@/hooks/useApi";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import background from "../assets/background.png";
 import logo from "../assets/logo.png";
 import { Canvas } from "./canvas";
-import { getRandomUsername } from '@viper-vortex/shared';
+import { getRandomUsername } from "@viper-vortex/shared";
+import { useSignals } from "@preact/signals-react/runtime";
+import { connect, disconnect, isConnected, scores } from "@/lib/socket";
+
 export default function HomePage() {
+  useSignals();
+
+  useEffect(() => {
+    return () => {
+      disconnect();
+    };
+  }, []);
+
+  if (!isConnected.value) return <Login />;
+  return (
+    <main className="flex h-full select-none flex-col items-center justify-center">
+      <Scoreboard />
+      <Canvas centered />
+    </main>
+  );
+}
+
+function Scoreboard() {
+  useSignals();
+  return (
+    <div className="pointer-events-none absolute right-0 top-0 m-4 flex flex-col gap-2 rounded-lg bg-white/10 p-4 text-white backdrop-blur-md">
+      <h2 className="text-xl font-bold">Leaderboard</h2>
+      <div className="flex w-80 flex-col gap-2">
+        {scores.value.map((player) => (
+          <div
+            key={player.name}
+            className="flex justify-between gap-8 text-white/70"
+          >
+            <div className="flex max-w-60 justify-between">
+              <span className="truncate">{player.name}</span>
+            </div>
+            <div className="flex max-w-20 justify-between truncate font-bold">
+              {Math.round(player.score)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Login() {
   const [serverUrl, setServerUrl] = useState<string>("http://localhost:4000");
   const [username, setUsername] = useState("");
-  const api = useApi();
 
   useEffect(() => {
     if (process.env.NODE_ENV === "production") {
       setServerUrl("sr.mael.app");
     }
-  }, [])
-
+  }, []);
 
   useEffect(() => {
-    setUsername(getRandomUsername())
-  }, [])
+    setUsername(getRandomUsername());
+  }, []);
 
-
-  if (!api.isConnected) return <Login
-    setServerUrl={setServerUrl}
-    serverUrl={serverUrl}
-    api={api}
-    setUsername={setUsername}
-    username={username}
-  />
   return (
-    <main className="flex h-full select-none flex-col items-center justify-center">
-      <div className="absolute right-0 top-0 bg-white/10 backdrop-blur-md rounded-lg text-white flex flex-col gap-2 p-4 m-4 pointer-events-none">
-        <h2 className="font-bold text-xl">Leaderboard</h2>
-        <div className="flex flex-col gap-2 w-80">
-          {api.scores?.map((player) => (
-            <div key={player.name} className="flex justify-between gap-8 text-white/70">
-              <div className="flex justify-between max-w-60">
-                <span className='truncate'>
-                  {player.name}
-                </span>
-              </div>
-              <div className="flex justify-between font-bold max-w-20 truncate">
-                {Math.round(player.score)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      {api.scene && <Canvas centered />}
-    </main>
-  );
-}
-
-function Login(props: {
-  serverUrl: string;
-  setServerUrl: (url: string) => void;
-  api: ReturnType<typeof useApi>;
-  username: string;
-  setUsername: (username: string) => void;
-}) {
-  return (
-    <main className='flex h-full flex-col items-center relative justify-center'>
-      <Image src={background} alt="Viper Vortex" layout="fill" objectFit="cover" className='fixed brightness-50 inset-0' />
+    <main className="relative flex h-full flex-col items-center justify-center">
+      <Image
+        src={background}
+        alt="Viper Vortex"
+        fill
+        className="fixed inset-0 object-cover brightness-50"
+      />
       <form
-        className="flex flex-col max-w-80 items-center gap-4 z-10"
+        className="z-10 flex max-w-80 flex-col items-center gap-4"
         onSubmit={(e) => {
           e.preventDefault();
-          props.api.connect(props.serverUrl, props.username);
+          connect(serverUrl, username);
         }}
       >
         <Image className="w-96" src={logo} alt="Viper Vortex"></Image>
-        <h1 className="text-2xl font-bold text-white w-full">
-          Viper Vortex
-        </h1>
+        <h1 className="w-full text-2xl font-bold text-white">Viper Vortex</h1>
         <p className="text-white/70">
-          Collect points by eating food and other players. If your head touches another player, you will explode and die.
+          Collect points by eating food and other players. If your head touches
+          another player, you will explode and die.
         </p>
-        <div className='relative h-14 w-full bg-white/10 backdrop-blur-md rounded-lg text-white'>
+        <div className="relative h-14 w-full rounded-lg bg-white/10 text-white backdrop-blur-md">
           <label
             htmlFor="username"
-            className='absolute top-0 left-0 px-4 py-2 pointer-events-none text-sm text-white/50 transition-all'
-          >Username</label>
+            className="pointer-events-none absolute left-0 top-0 px-4 py-2 text-sm text-white/50 transition-all"
+          >
+            Username
+          </label>
           <input
             required
             id="username"
-            value={props.username}
-            onChange={(e) => props.setUsername(e.target.value)}
-            className="px-4 pb-2 pt-6 bg-transparent w-full rounded-lg"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full rounded-lg bg-transparent px-4 pb-2 pt-6"
             type="text"
             placeholder="Your username"
           />
         </div>
-        <div className='relative h-14 w-full bg-white/10 backdrop-blur-md rounded-lg text-white'>
+        <div className="relative h-14 w-full rounded-lg bg-white/10 text-white backdrop-blur-md">
           <label
             htmlFor="serverUrl"
-            className='absolute top-0 left-0 px-4 py-2 pointer-events-none text-sm text-white/50 transition-all'
-          >Server</label>
+            className="pointer-events-none absolute left-0 top-0 px-4 py-2 text-sm text-white/50 transition-all"
+          >
+            Server
+          </label>
           <input
             required
             id="serverUrl"
-            value={props.serverUrl}
-            onChange={(e) => props.setServerUrl(e.target.value)}
-            className="px-4 pb-2 pt-6 bg-transparent w-full rounded-lg"
+            value={serverUrl}
+            onChange={(e) => setServerUrl(e.target.value)}
+            className="w-full rounded-lg bg-transparent px-4 pb-2 pt-6"
             type="text"
             placeholder="Server URL"
           />
         </div>
         <button
-          disabled={!props.username || !props.serverUrl}
-          className="bg-white/30 backdrop-blur-md rounded-lg p-4 text-white w-full disabled:text-red-500 disabled:cursor-not-allowed disabled:bg-red-500/10 border-4 border-white/5 transition-all hover:bg-white/20 hover:border-white/20"
+          disabled={!username || !serverUrl}
+          className="w-full rounded-lg border-4 border-white/5 bg-white/30 p-4 text-white backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/20 disabled:cursor-not-allowed disabled:bg-red-500/10 disabled:text-red-500"
         >
           Play
         </button>

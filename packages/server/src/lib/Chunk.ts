@@ -24,7 +24,9 @@ export class Chunk {
     public loaded = false,
 
     public subscribers: Map<string, Socket> = new Map()
-  ) {}
+  ) {
+    this.load();
+  }
 
   public load() {
     this.loaded = true;
@@ -37,8 +39,8 @@ export class Chunk {
   }
 
   public unload() {
-    this.loaded = false;
-    this.orbs = new Map();
+    // this.loaded = false;
+    // this.orbs = new Map();
   }
 
   public removePlayer(player: Player) {
@@ -109,6 +111,9 @@ export class Chunk {
   }
 
   public subscribe(socket: Socket) {
+    if (this.subscribers.has(socket.id)) {
+      return;
+    }
     console.log('subscribing');
     this.subscribers.set(socket.id, socket);
     // send a load chunk message
@@ -123,6 +128,7 @@ export class Chunk {
       )
     );
     // send all orbs
+    console.log('sending orbs' + Array.from(this.orbs.values()).length);
     socket.emit(
       SOCKET_EVENTS.ADD_ORB,
       encode(

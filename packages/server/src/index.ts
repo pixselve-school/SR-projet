@@ -43,11 +43,11 @@ io.on(SOCKET_EVENTS.CONNECT, (socket) => {
 });
 
 setInterval(() => {
-  scene.update();
   for (let player of scene.playerArray) {
     const scenePov = scene.povDto(player);
     player.socket.emit(SOCKET_EVENTS.FRAME, scenePov);
   }
+  scene.update();
 }, 1000 / TPS);
 
 setInterval(() => {

@@ -1,10 +1,10 @@
-import { type Api } from "@/hooks/useApi";
 import { screenToWorld, worldToScreen } from "@/utils/position";
 import { OrbDTO, type Position, type SceneDTO } from "@viper-vortex/shared";
 import { MyPlayer } from "./MyPlayer";
 import { Orb } from "./Orb";
 import { Player } from "./Player";
 import { TimeManager } from "./TimeManager";
+import { move, socket } from "@/lib/socket";
 
 export type Params = {
   centered: boolean;
@@ -19,12 +19,27 @@ export type Camera = {
 };
 
 export class Game {
+  private static _instance: Game | null;
+
+  public static get instance(): Game | null {
+    return Game._instance;
+  }
+
+  public static destroy() {
+    if (!Game._instance) return;
+    Game._instance.disabled = true;
+    this._instance = null;
+  }
+
+  public static create() {
+    Game._instance = new Game();
+  }
+
   private players: Record<string, Player> = {};
   private orbs: Record<string, Orb> = {};
   private mapSize = { width: 0, height: 0 };
   private me: MyPlayer | undefined;
   private params: Params = { centered: true };
-  private api: Api | undefined;
   private angle = 0;
   private canvas: HTMLCanvasElement | null = null;
   time: TimeManager;
@@ -34,17 +49,15 @@ export class Game {
   screen = { width: 0, height: 0 };
   c: CanvasRenderingContext2D | undefined;
 
-  constructor() {
+  private disabled = false;
+
+  private constructor() {
     this.time = new TimeManager();
     this.time.addUpdateCallback(this.update.bind(this));
     this.time.addFixedUpdateCallback(this.fixedUpdate.bind(this));
     this.time.start();
 
     console.log("Game Instance Created");
-  }
-
-  destroy() {
-    console.log("Game Instance Destroyed");
   }
 
   setCanvas(canvas: HTMLCanvasElement | null) {
@@ -58,7 +71,7 @@ export class Game {
     const notSeen = new Set(Object.keys(this.players));
     scene.players.forEach((player) => {
       notSeen.delete(player.id); // seen
-      if (this.api?.socket?.id && player.id === this.api?.socket.id) {
+      if (socket.id && player.id === socket.id) {
         if (!this.me) this.me = new MyPlayer(player, this);
         else this.me.update(player);
         return;
@@ -129,10 +142,6 @@ export class Game {
     c.scale(dpr, dpr);
   }
 
-  setApi(api: Api) {
-    this.api = api;
-  }
-
   setScreenSize(screen: { width: number; height: number }) {
     this.screen = screen;
   }
@@ -175,6 +184,7 @@ export class Game {
 
   update() {
     if (!this.c) return;
+
     this.c.clearRect(0, 0, this.screen.width, this.screen.height);
 
     this.drawBorder();
@@ -201,8 +211,7 @@ export class Game {
   }
 
   fixedUpdate() {
-    const api = this.api;
-    if (!api) return;
-    api.move({ angle: this.angle, isSprinting: this.isSprinting });
+    if (this.disabled) return;
+    move(this.angle, this.isSprinting);
   }
 }

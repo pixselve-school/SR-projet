@@ -1,4 +1,3 @@
-import { SharedStateProvider } from "@/lib/shared-state";
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
@@ -34,10 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SharedStateProvider>
-      <html lang="en" className="h-full">
-        <body className={`h-full font-sans ${inter.variable}`}>{children}</body>
-      </html>
-    </SharedStateProvider>
+    <html lang="en" className="h-full">
+      <body className={`h-full font-sans ${inter.variable}`}>{children}</body>
+    </html>
   );
 }

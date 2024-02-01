@@ -1,49 +1,41 @@
 "use client";
 
-import { useApi } from "@/hooks/useApi";
-import { useGame } from "@/hooks/useGame";
 import { useMouse } from "@/hooks/useMouse";
 import { useScreen } from "@/hooks/useScreen";
-import { type Params } from "@/lib/Game";
+import { Game, type Params } from "@/lib/Game";
 import { useEffect, useRef } from "react";
 
 export function Canvas(params: Params) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const cursorScreen = useMouse(canvasRef);
   const screen = useScreen();
-  const game = useGame();
-  const api = useApi(game);
+
   useEffect(() => {
-    if (!game) return;
     function handleKeyDown(e: KeyboardEvent) {
-      if (!game) return;
-      // esacpe
+      // escape
       if (e.key === "Escape") {
-        game.togglePause();
+        Game.instance?.togglePause();
       }
       // space
       if (e.key === " ") {
-        game.setSpriniting(true);
+        Game.instance?.setSpriniting(true);
       }
     }
     function handleKeyUp(e: KeyboardEvent) {
-      if (!game) return;
       // space
       if (e.key === " ") {
-        game.setSpriniting(false);
+        Game.instance?.setSpriniting(false);
       }
     }
 
     function handleMouseDown(e: MouseEvent) {
-      if (!game) return;
       if (e.button === 0) {
-        game.setSpriniting(true);
+        Game.instance?.setSpriniting(true);
       }
     }
     function handleMouseUp(e: MouseEvent) {
-      if (!game) return;
       if (e.button === 0) {
-        game.setSpriniting(false);
+        Game.instance?.setSpriniting(false);
       }
     }
 
@@ -57,41 +49,26 @@ export function Canvas(params: Params) {
       document.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [game]);
+  }, []);
 
   useEffect(() => {
-    if (!game) return;
-    game.setApi(api);
-  }, [api, game]);
+    Game.instance?.setCursor(cursorScreen);
+  }, [cursorScreen]);
 
   useEffect(() => {
-    if (!game) return;
-    game.setCursor(cursorScreen);
-  }, [cursorScreen, game]);
-
-  useEffect(() => {
-    if (!game) return;
-    game.setCanvas(canvasRef.current);
+    Game.instance?.setCanvas(canvasRef.current);
     const c = canvasRef.current?.getContext("2d");
     if (!c) return;
-    game.setContext(c);
-  }, [game]);
+    Game.instance?.setContext(c);
+  }, []);
 
   useEffect(() => {
-    if (!game) return;
-    game.updateParams(params);
-  }, [game, params]);
+    Game.instance?.updateParams(params);
+  }, [params]);
 
   useEffect(() => {
-    if (!game) return;
-    game.setScreenSize(screen);
-  }, [game, screen]);
-
-  useEffect(() => {
-    if (!game) return;
-    if (!api.scene) return;
-    game.setScene(api.scene);
-  }, [api.scene, game]);
+    Game.instance?.setScreenSize(screen);
+  }, [screen]);
 
   return (
     <canvas

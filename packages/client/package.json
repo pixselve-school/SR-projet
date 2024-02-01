@@ -11,6 +11,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@preact/signals-react": "^2.0.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@types/lodash": "^4.14.202",
     "@viper-vortex/shared": "*",
@@ -18,9 +19,9 @@
     "next": "^14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sharp": "^0.33.2",
     "socket.io-client": "^4.7.4",
-    "zod": "^3.22.4",
-    "sharp": "^0.33.2"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/eslint": "^8.44.7",
