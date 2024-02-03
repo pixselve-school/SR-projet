@@ -4,7 +4,7 @@
     "packages/client",
     "packages/server",
     "packages/shared",
-    "packages/end-to-end-tests"
+    "packages/load-test"
   ],
   "scripts": {
     "dev": "concurrently -n \"░ client,█ server,▒ shared\" \"npm:dev --workspace=packages/client\" \"npm:dev --workspace=packages/server\" \"npm:watch --workspace=packages/shared\"",
