@@ -7,13 +7,14 @@
 
 # 📁 Architecture
 
-The project is divided into 3 packages:
+The project is divided into 4 packages:
 
 ```text
 packages/
 ├── client
 ├── server
 └── shared
+└── load-test
 ```
 
 # 😆 Usage
