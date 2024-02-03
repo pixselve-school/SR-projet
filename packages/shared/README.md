@@ -18,7 +18,3 @@ Import the types and constants from the package and use them in your code. For e
 ```typescript
 import { SOCKET_EVENTS, TPS } from '@viper-vortex/shared';
 ```
-
-## License
-
-This package is licensed under the MIT License. See the `LICENSE` file in the main Viper Vortex project repository for more details.
