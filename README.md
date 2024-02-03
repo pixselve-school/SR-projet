@@ -7,7 +7,7 @@
 
 # 📁 Architecture
 
-Le projet est divisé en 3 packages : client, server et shared.
+The project is divided into 3 packages:
 
 ```text
 packages/
@@ -16,7 +16,7 @@ packages/
 └── shared
 ```
 
-# 😆 Utilisation
+# 😆 Usage
 
 **TODO**
 
