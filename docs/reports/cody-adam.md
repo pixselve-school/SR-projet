@@ -6,6 +6,7 @@
 - [My frontend](#my-frontend)
 - [Main Features I implemented](#main-features-i-implemented)
   - [Project Structure](#project-structure)
+  - [Making the game engine](#making-the-game-engine)
   - [Setup the front-end and GUI](#setup-the-front-end-and-gui)
   - [Communication setup](#communication-setup)
   - [Time management and game loop](#time-management-and-game-loop)
@@ -18,23 +19,23 @@ When we started the project, we had a lot of game ideas, but we decided to go wi
 
 # Our approach
 
-At first we really focus thinking how would the communication between the server and the client would work. We decided to go with websockets because it was the most efficient way to communicate between the server and the client.
+At first, we really focus thinking how would the communication between the server and the client would work. We decided to go with websockets because it was the most efficient way to communicate between the server and the client.
 
 Then we planned a good roadmap of features to implement. Starting with the MVP and then adding more features to make the game more fun and interesting. [Check the Readme for the roadmap](../../README.md)
 
-We are both well qualified in web development so this part was quite easy for us. We decided quite early to split the workload between the server and the client. Mael would work on the server and I would work on the client which would avoid us to step on each other's toes.
+We are both well qualified in web development, so this part was quite easy for us. We decided quite early to split the workload between the server and the client. Mael would work on the server and I would work on the client, which would avoid us stepping on each other's toes.
 
-Before going directly to the implementation we made sure to set the shared DTOs (Data Transfer Objects) types that would be used by both the server and the client. This was a good idea because it allowed us to work in parallel without having to wait for the other to finish their part. ([packages/shared/src/types.ts](../../packages/shared/src/types.ts))
+Before going directly to the implementation, we made sure to set the shared DTOs (Data Transfer Objects) types that would be used by both the server and the client. This was a good idea because it allowed us to work in parallel without having to wait for the other to finish their part. ([packages/shared/src/types.ts](../../packages/shared/src/types.ts))
 
 # My frontend
 
-For the frontend here is the technologies I used and why:
+For the frontend, here are the technologies I used and why:
 
 - Next.js: just one of the best React Frameworks out there. It's easy to use and it's very powerful.
 - React: My preferred library for building UIs.
 - TypeScript: Because JS is 🤮
 - Socket.io: A popular library for websockets. This is what we used to communicate between the server and the client.
-- TailwindCSS: For the styling (css framework)
+- TailwindCSS: For the styling (CSS framework)
 
 # Main Features I implemented
 
@@ -69,13 +70,13 @@ client/src
 
 ## Making the game engine
 
-When making a game, most of the time it's easier to work in OOP (Object Oriented Programming). So I made a game engine with the different classes that would be used in the game.
+When making a game, most of the time it's easier to work in OOP (Object-Oriented Programming). So I made a game engine with the different classes that would be used in the game.
 
-Here is an UML diagram that represents the structure of the game engine:
+Here is a UML diagram that represents the structure of the game engine:
 
 ![oop](images/oop.png)
 
-The main part being the `Game` singleton which contains all the entities of the game.
+The main part being the `Game` singleton, which contains all the entities of the game.
 
 ## Setup the front-end and GUI
 
@@ -88,7 +89,7 @@ I don't want to go into too much detail about the GUI because it's not the main 
 
 ## Communication setup
 
-For the communication between the server and the client we used websockets.
+For the communication between the server and the client, we used websockets.
 Why is that? Because websockets are the most efficient way to communicate bidirectionally and frequently between the server and the client.
 For this we used the popular library `socket.io`.
 
@@ -96,13 +97,13 @@ Using websocket on client-side is quite simple, here is a **simplified** overvie
 
 - First we connect to the server
 - Then we listen to the events we want to receive from the server
-  - Listen to `SCORES` event -> update the scores
-  - Listen to `ORBS` event -> update the orbs
-  - Listen to `SCENE` event -> update the scene (all visible players)
+  - Listen to `SCORES` event → update the scores
+  - Listen to `ORBS` event → update the orbs
+  - Listen to `SCENE` event → update the scene (all visible players)
 - And we emit the events we want to send to the server
   - At a fixed rate we send our inputs to the server, Emit `PLAYER MOVE` event
 
-For the source see : [packages/client/src/hooks/useApi.ts](../../packages/client/src/hooks/useApi.ts)
+For the source, see : [packages/client/src/hooks/useApi.ts](../../packages/client/src/hooks/useApi.ts)
 
 ## Time management and game loop
 
@@ -113,16 +114,17 @@ In a game, we often split the render from the logic. That's why there are 2 type
 - **The fixed update**: This is the update that will update the game at a fixed rate. This is where we do heavy calculations, in our case we send the inputs of the players to the server.
 - **The update**: This is the update that will update the game at the frame rate. This is where we render the game on the screen.
 
-For the source see : [packages/client/src/lib/TimeManager.ts](../../packages/client/src/lib/TimeManager.ts)
+For the source, see : [packages/client/src/lib/TimeManager.ts](../../packages/client/src/lib/TimeManager.ts)
 
-Using this I can easily calculate the FPS (frame per second) and TPS (tick per second) of the game.
+Using this, I can easily calculate the FPS (frame per second) and TPS (tick per second) of the game.
 
 ## Client side interpolation
 
-Because we splitted the update from the fixed update we can get a high frame rate on the client side.
+Because we split the update from the fixed update, we can get a high frame rate on the client side.
+
 The problem is that it's the server that sends the updates position of the players. That means that even with a high frame rate, the player will still see the other players moving in a choppy way.
 
-To counter that we can use interpolation to smooth the position of objects when they move.
+To counter that, we can use interpolation to smooth the position of objects when they move.
 
 > From https://domwillia.ms/devlog1/
 >
@@ -140,7 +142,7 @@ I implemented this same system to get the smoothness of the movement of the play
 
 # Feedback
 
-Me and Mael, we both enjoyed working on this project, the main factor is we had a lot of freedom and room for creativity. 
+Me and Mael, we both enjoyed working on this project, the main factor is we had a lot of freedom and room for creativity.
 I think this is the reason why we both spent a lot more time on this project than we initially planned, it's because we were having fun working on it.
 
-We could have spent even more time on it because this type of project is never really "finished". But we are happy with the result and we are happy to have worked on this project.
+We could have spent even more time on it because this type of project is never really "finished". But we are happy with the result, and we are happy to have worked on this project.
