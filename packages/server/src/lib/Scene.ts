@@ -98,7 +98,7 @@ export class Scene {
       const orbs = player.headChunk!.getCollidingOrbsWithPlayer(player);
       for (let orb of orbs) {
         player.headChunk!.removeOrb(orb);
-        player.score += SCORE_PER_GAINED_ORB + orb.size;
+        player.score += orb.points;
       }
 
       // Check if the player has collided with any other players

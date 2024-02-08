@@ -13,6 +13,7 @@ export class Player extends Entity {
   name: string;
   color: string;
   score: number;
+  isSprinting: boolean;
 
   constructor(p: PlayerDTO, game: Game) {
     super(p.id, game);
@@ -21,6 +22,7 @@ export class Player extends Entity {
     this.name = p.name;
     this.color = p.color;
     this.score = p.score;
+    this.isSprinting = p.isSprinting;
   }
 
   update(p: PlayerDTO) {
@@ -56,7 +58,7 @@ export class Player extends Entity {
     c.lineJoin = "round";
     c.globalAlpha = 1;
     // add an outline if sprinting
-    if (this.game.isSprinting) {
+    if (this.isSprinting) {
       c.shadowBlur = 10;
       // change alpha based on time
       const t = this.game.time.fixedTickCount;

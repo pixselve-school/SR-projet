@@ -18,7 +18,7 @@ export const MAP_CHUNKS_WIDTH = 10;
  */
 export const FOOD_PER_CHUNK = 20;
 
-export const FOOD_POINTS = 2;
+export const FOOD_POINTS = 6;
 
 export const BODY_PART_PER_ORB = 3;
 

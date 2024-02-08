@@ -16,6 +16,7 @@ export type PlayerDTO = {
   name: string;
   color: string;
   score: number;
+  isSprinting: boolean;
 };
 
 /**

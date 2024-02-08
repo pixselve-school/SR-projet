@@ -61,6 +61,7 @@ export class Player {
       color: this.color,
       body: this.body,
       score: this.score,
+      isSprinting: this.isSprinting,
     };
   }
 

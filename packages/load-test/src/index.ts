@@ -4,7 +4,7 @@ import { SOCKET_EVENTS, TPS } from '@viper-vortex/shared';
 const URL = process.env.URL || 'http://localhost:4000';
 const CLIENT_COUNT = process.env.CLIENT_COUNT
   ? parseInt(process.env.CLIENT_COUNT)
-  : 150;
+  : 50;
 
 console.log(`🔗 Using URL: ${URL}`);
 
@@ -36,7 +36,7 @@ const clients = new Array(CLIENT_COUNT).fill(0).map((_, i) => {
   setInterval(() => {
     socket.emit(SOCKET_EVENTS.MOVE, {
       angle: Math.random() * Math.PI * 2, // Random angle in radians
-      isSprinting: Math.random() > 0.5,
+      isSprinting: Math.random() > 0.02,
     });
   }, 1000);
 
