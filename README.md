@@ -7,61 +7,20 @@
 
 ![banner](./docs/assets/demo.gif)
 
-# Communication Client - Server
+- [📁 Architecture](#-architecture)
+- [😆 Usage](#-usage)
+- [Communication Client - Server](#communication-client---server)
+  - [Websocket](#websocket)
+  - [Data transfer](#data-transfer)
+- [Chunking system](#chunking-system)
+- [Project milestones](#project-milestones)
+  - [MVP](#mvp)
+  - [Improvement 1](#improvement-1)
+  - [Improvement 2](#improvement-2)
+  - [Improvement 3](#improvement-3)
+  - [Improvement 4](#improvement-4)
+  - [Improvement 5](#improvement-5)
 
-## Websocket
-
-![websocket](./docs/assets/websocket.png)
-
-## Data transfer
-
-![Communication](./docs/assets/comm.png)
-
-**Server -> Client**:
-```ts
-type SceneDTO = {
-    width: number;
-    height: number;
-    players: {
-        body: {
-            x: number;
-            y: number;
-        }[];
-        id: string;
-        name: string;
-        color: string;
-        score: number;
-        isSprinting: boolean;
-    }[];
-};
-
-type OrbDTO = {
-    points: number;
-    color: string;
-    id: string;
-    position: {
-        x: number;
-        y: number;
-    };
-}
-
-type ScoresDTO = {
-    name: string;
-    score: number;
-}[]
-```
-
-**Client -> Server**:
-```ts
-type PlayerMoveDTO = {
-    angle: number;
-    isSprinting: boolean;
-}
-```
-
-# Chunking system
-
-![chunking](./docs/assets/chunk-demo.gif)
 
 # 📁 Architecture
 
@@ -80,7 +39,6 @@ packages/
 Play now at https://pixselve-school.github.io/SR-projet/ !
 
 > You can use the deployed server url `sr.mael.app`.
-
 
 If you want to run the server locally, you can use the following command:
 
@@ -102,6 +60,63 @@ For more information, see the README in each package.
 - [Shared](./packages/shared/README.md)
 - [Load Test](./packages/load-test/README.md)
 
+# Communication Client - Server
+
+## Websocket
+
+![websocket](./docs/assets/websocket.png)
+
+## Data transfer
+
+![Communication](./docs/assets/comm.png)
+
+**Server -> Client**:
+
+```ts
+type SceneDTO = {
+  width: number;
+  height: number;
+  players: {
+    body: {
+      x: number;
+      y: number;
+    }[];
+    id: string;
+    name: string;
+    color: string;
+    score: number;
+    isSprinting: boolean;
+  }[];
+};
+
+type OrbDTO = {
+  points: number;
+  color: string;
+  id: string;
+  position: {
+    x: number;
+    y: number;
+  };
+};
+
+type ScoresDTO = {
+  name: string;
+  score: number;
+}[];
+```
+
+**Client -> Server**:
+
+```ts
+type PlayerMoveDTO = {
+  angle: number;
+  isSprinting: boolean;
+};
+```
+
+# Chunking system
+
+![chunking](./docs/assets/chunk-demo.gif)
 
 # Project milestones
 
@@ -140,7 +155,7 @@ For more information, see the README in each package.
 ## Improvement 4
 
 - [x] Make the game look good
-- [x] Animation on sprinting 
+- [x] Animation on sprinting
 
 ## Improvement 5
 

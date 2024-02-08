@@ -1,8 +1,16 @@
 # My personal report on the SR project - Cody Adam
 
-# Feedback
-
-Me and Mael, we both enjoyed working on this project, the main factor is we had a lot of freedom and room for creativity. This is why we both spent a lot more time on this project than we initially planned.
+- [My personal report on the SR project - Cody Adam](#my-personal-report-on-the-sr-project---cody-adam)
+- [Our vision](#our-vision)
+- [Our approach](#our-approach)
+- [My frontend](#my-frontend)
+- [Main Features I implemented](#main-features-i-implemented)
+  - [Project Structure](#project-structure)
+  - [Setup the front-end and GUI](#setup-the-front-end-and-gui)
+  - [Communication setup](#communication-setup)
+  - [Time management and game loop](#time-management-and-game-loop)
+  - [Client side interpolation](#client-side-interpolation)
+- [Feedback](#feedback)
 
 # Our vision
 
@@ -32,45 +40,51 @@ For the frontend here is the technologies I used and why:
 
 ## Project Structure
 
-client
-  ├─ src
-  │  ├─ app
-  │  │  ├─ apple-icon.png
-  │  │  ├─ canvas.tsx
-  │  │  ├─ favicon.ico
-  │  │  ├─ icon.png
-  │  │  ├─ opengraph-image.png
-  │  │  └─ page.tsx
-  │  ├─ assets
-  │  │  ├─ background.png
-  │  │  └─ logo.png
-  │  ├─ env.js
-  │  ├─ hooks
-  │  │  ├─ useApi.ts
-  │  │  ├─ useGame.ts
-  │  │  ├─ useMouse.ts
-  │  │  └─ useScreen.ts
-  │  ├─ lib
-  │  │  ├─ Entity.ts
-  │  │  ├─ Game.ts
-  │  │  ├─ MyPlayer.ts
-  │  │  ├─ Orb.ts
-  │  │  ├─ Player.ts
-  │  │  ├─ shared-state.tsx
-  │  │  └─ TimeManager.ts
-  │  ├─ styles
-  │  │  └─ globals.css
-  │  └─ utils
-  │     ├─ position.ts
-  │     └─ random.ts
-  ├─ tailwind.config.ts
-  └─ tsconfig.json
+```
+client/src
+  ├─ app                    // GUI
+  │ ├─ apple-icon.png
+  │ ├─ canvas.tsx
+  │ ├─ favicon.ico
+  │ ├─ icon.png
+  │ ├─ opengraph-image.png
+  │ └─ page.tsx
+  ├─ assets
+  ├─ hooks                  // UTILS REACT HOOKS
+  │ ├─ useApi.ts
+  │ ├─ useGame.ts
+  │ ├─ useMouse.ts
+  │ └─ useScreen.ts
+  ├─ lib                    // MY GAME ENGINE
+  │ ├─ Entity.ts
+  │ ├─ Game.ts
+  │ ├─ MyPlayer.ts
+  │ ├─ Orb.ts
+  │ ├─ Player.ts
+  │ ├─ shared-state.tsx
+  │ └─ TimeManager.ts
+  ├─ styles
+  └─ utils                  // UTILS FUNCTIONS
+```
+
+## Making the game engine
+
+When making a game, most of the time it's easier to work in OOP (Object Oriented Programming). So I made a game engine with the different classes that would be used in the game.
+
+Here is an UML diagram that represents the structure of the game engine:
+
+![oop](images/oop.png)
+
+The main part being the `Game` singleton which contains all the entities of the game.
 
 ## Setup the front-end and GUI
 
 For the GUI, it's quite simple, we have 2 pages:
+
 - Login page: Ask for a username and a server url
 - Game page: The game wich use an HTML canvas to render the game
+
+I don't want to go into too much detail about the GUI because it's not the main part of the project.
 
 ## Communication setup
 
@@ -112,3 +126,10 @@ To counter that we can use interpolation to smooth the position of objects when 
 I implemented this same system to get the smoothness of the movement of the players and the camera even if the TPS is low.
 
 ![Demo](../assets/demo.gif)
+
+# Feedback
+
+Me and Mael, we both enjoyed working on this project, the main factor is we had a lot of freedom and room for creativity. 
+I think this is the reason why we both spent a lot more time on this project than we initially planned, it's because we were having fun working on it.
+
+We could have spent even more time on it because this type of project is never really "finished". But we are happy with the result and we are happy to have worked on this project.
