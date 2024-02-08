@@ -106,6 +106,17 @@ For the source see : [packages/client/src/hooks/useApi.ts](../../packages/client
 
 ## Time management and game loop
 
+The game loop is the main part of the game engine. It's the part that will update the game at a fixed rate.
+
+In a game, we often split the render from the logic. That's why there are 2 types of updates:
+
+- **The fixed update**: This is the update that will update the game at a fixed rate. This is where we do heavy calculations, in our case we send the inputs of the players to the server.
+- **The update**: This is the update that will update the game at the frame rate. This is where we render the game on the screen.
+
+For the source see : [packages/client/src/lib/TimeManager.ts](../../packages/client/src/lib/TimeManager.ts)
+
+Using this I can easily calculate the FPS (frame per second) and TPS (tick per second) of the game.
+
 ## Client side interpolation
 
 Because we splitted the update from the fixed update we can get a high frame rate on the client side.
