@@ -1,6 +1,5 @@
 # My personal report on the SR project - Cody Adam
 
-- [My personal report on the SR project - Cody Adam](#my-personal-report-on-the-sr-project---cody-adam)
 - [Our vision](#our-vision)
 - [Our approach](#our-approach)
 - [My frontend](#my-frontend)
