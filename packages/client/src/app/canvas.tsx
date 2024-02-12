@@ -103,6 +103,10 @@ export function Canvas(params: Params) {
   useEffect(() => {
     if (!game) return;
     game.setScreenSize(screen);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.width = screen.width;
+    canvas.height = screen.height;
   }, [game, screen]);
 
   useEffect(() => {
@@ -120,8 +124,6 @@ export function Canvas(params: Params) {
     <canvas
       ref={canvasRef}
       className="grid-bg h-full w-full"
-      height={screen.height}
-      width={screen.width}
     />
   );
 }

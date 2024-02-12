@@ -29,7 +29,7 @@ export class Game {
   private canvas: HTMLCanvasElement | null = null;
   time: TimeManager;
   isSprinting = false;
-  camera: Camera = { offset: { x: 0, y: 0 }, zoom: 2 };
+  camera: Camera = { offset: { x: 0, y: 0 }, zoom: 1.5 };
   cursor: Position = { x: 0, y: 0 };
   screen = { width: 0, height: 0 };
   c: CanvasRenderingContext2D | undefined;

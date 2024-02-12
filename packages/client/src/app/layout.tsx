@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <SharedStateProvider>
-      <html lang="en" className="h-full">
+      <html lang="en" className="h-full text-[12px] sm:text-base">
         <body className={`h-full font-sans ${inter.variable}`}>{children}</body>
       </html>
     </SharedStateProvider>

@@ -50,7 +50,7 @@ export default function HomePage() {
               </div>
             </div>
           ))}
-          {(api.scores?.length ?? 0 > 5) && (
+          {(api.scores?.length ?? 0) > 5 && (
             <span className="opacity-40">
               ... {api.scores?.length ?? 0 - 5} more players
             </span>
