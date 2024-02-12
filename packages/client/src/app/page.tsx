@@ -37,7 +37,7 @@ export default function HomePage() {
       <div className="pointer-events-none absolute right-0 top-0 m-4 flex flex-col gap-2 rounded-lg bg-white/10 p-4 text-white backdrop-blur-md">
         <h2 className="text-xl font-bold">Leaderboard</h2>
         <div className="flex w-80 flex-col gap-2">
-          {api.scores?.map((player) => (
+          {api.scores?.slice(0, 5).map((player) => (
             <div
               key={player.name}
               className="flex justify-between gap-8 text-white/70"
@@ -50,6 +50,11 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+          {(api.scores?.length ?? 0 > 5) && (
+            <span className="opacity-40">
+              ... {api.scores?.length ?? 0 - 5} more players
+            </span>
+          )}
         </div>
       </div>
       {api.scene && <Canvas centered />}

@@ -37,7 +37,7 @@ export class Orb extends Entity{
     );
     c.fillStyle = this.color;
     // lower opacity 
-    c.globalAlpha = 0.4;
+    c.globalAlpha = 0.7;
     c.lineWidth = 0;
     c.shadowBlur = 6;
     c.shadowColor = "rgba(255, 255, 255, 0.4)";
