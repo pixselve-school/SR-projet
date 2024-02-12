@@ -46,16 +46,34 @@ export function Canvas(params: Params) {
         game.setSpriniting(false);
       }
     }
+    function handleTouchStart(e: TouchEvent) {
+      if (!game) return;
+      // if 2 or more touches, sprint
+      if (e.touches.length > 1) {
+        game.setSpriniting(true);
+      }
+    }
+
+    function handleTouchEnd(e: TouchEvent) {
+      if (!game) return;
+      if (e.touches.length <= 1) {
+        game.setSpriniting(false);
+      }
+    }
 
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
     document.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchstart", handleTouchStart);
+    document.addEventListener("touchend", handleTouchEnd);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
       document.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
   }, [game]);
 
